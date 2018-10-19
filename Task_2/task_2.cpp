@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 #include <vector>
 
 using namespace std;
@@ -10,7 +11,8 @@ public:
 	int k;
 	void remove_brackets( string rb);
 	proof_validator( int l);
-}; 
+	void removeSpaces();
+};
 
 proof_validator:: proof_validator(int l)
 {
@@ -24,6 +26,19 @@ string remove_brackets(string rb)
 	rb = temp;
 	rb.resize(len-2);
 	return rb;
+}
+
+void removeSpaces(){
+	for(int i=0;i<k;i++){
+		int p=0;
+		for(int j=0;j<str[i].length();j++){
+			if(str[i][j]!=' '){
+				str[i][p++]=str[i][j];
+			}
+		}
+		str[i].resize(p);
+
+	}
 }
 
 int main()
