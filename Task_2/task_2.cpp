@@ -20,10 +20,14 @@ class proof_validator
 public:
 	std::vector<std::string> str;
 	int k;
-	void remove_brackets( string rb);
+	string remove_brackets( string rb);
 	int return_rule(string rule);
 	proof_validator( int l);
 	void removeSpaces();
+	bool implies_elimination(int a,int b,int current);
+
+
+
 };
 
 proof_validator:: proof_validator(int l)
@@ -89,6 +93,21 @@ string onlyFormula(string &a){
 	}
 	return arr;
 }
+bool proof_validator::implies_elimination(int a,int b,int current){
+	string a = onlyFormula(str[a-1]);
+	string y = onlyFormula(str[b-1]);
+    string x=proof_validator::remove_brackets(a);
+	int z=x.find(">");
+	string x1=x.substr(z+1);
+	string x2=x.substr(z+1,x.length()-(z+1));
+	string currentline=str[current-1];
+	currentline=onlyFormula(currentline);
+	if(x1.compare(y)!=0||x2.compare(currentline)!=0)
+		return false;
+	else
+		return true;
+}
+
 
 int main()
 {
@@ -118,12 +137,13 @@ int main()
 	for( ptr=obj.str.begin();ptr!=obj.str.end();ptr++)
     {
         string temp=*ptr;
-        int x=removeSpaces(temp,temp.length());
+        int x=removeSpaces(temp);
         temp.resize(x);
         obj.str.at(v++)=temp;
 
 
     }
+    bool tf=obj.implies_elimination(1,2,3);
 
 	return 0;
 }
