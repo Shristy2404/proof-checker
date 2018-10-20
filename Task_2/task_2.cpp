@@ -2,8 +2,8 @@
 #include <string>
 #include <vector>
 #include <iterator>
-#include <string>
 #include <algorithm>
+#include <sstream>
 
 #define AND_INTRODUCTION 1
 #define AND_ELIMINATION_1 2
@@ -25,9 +25,10 @@ public:
 	proof_validator( int l);
 	void removeSpaces();
 	bool implies_elimination(int a,int b,int current);
-
-
-
+	//void removeSpaces();
+	bool check_premise(string prem);
+	bool and_introduction( int line_1, int line_2, string line);
+	string only_statement(string line);
 };
 
 proof_validator:: proof_validator(int l)
@@ -35,15 +36,18 @@ proof_validator:: proof_validator(int l)
 	k=l;
 }
 
-string remove_brackets(string rb)
+string proof_validator::remove_brackets(string rb)
 {
+	cout << rb << endl;
 	int len = rb.length();
+	cout << len << endl;
 	string temp = rb.substr(1,len-2);
 	rb = temp;
 	rb.resize(len-2);
+	cout << rb << endl;
 	return rb;
+	//(a^(b^c))
 }
-
 
 int removeSpaces(string &a)
 {
@@ -77,31 +81,46 @@ int return_rule(string rule)
 	return -1;
 }
 
-string onlyFormula(string &a){
-	string arr;
-	int count=0,count1=0;
-	for(int i=0;i<a.length();i++){
-	    //cout<<a[i]<<endl;
-		if(a[i]!='/'){
-		    //cout<<a[i]<<endl;
-		    arr.resize(++count1);
-		    arr[count++]=a[i];
-		    //cout<<arr<<endl;
-		}
-        else
-            break;
-	}
-	return arr;
+bool proof_validator::check_premise(string prem)
+{
+	if(!(prem.compare("P")))
+		return 1;
+	return 0;
+}
+
+bool proof_validator::and_introduction( int line_1, int line_2, string line)
+{
+	string and_intro_1 = only_statement(str[line_1]);
+	string and_intro_2 = only_statement(str[line_2]);
+	string statement_3 = only_statement(line);
+    string statement_4 = remove_brackets(statement_3);
+	string comp_1 = and_intro_1 + "^" + and_intro_2;
+	string comp_2 = and_intro_2 + "^" + and_intro_1;
+	cout << comp_1 << " " << comp_2 << endl;
+	cout << statement_4 << endl;
+	if( (!(statement_4.compare(comp_1))) || (!(statement_4.compare(comp_2))))
+		return true;
+	return false;
+
+}
+
+
+string proof_validator::only_statement(string line)
+{
+	string statement;
+	int index = line.find('/');
+	statement = line.substr(0, index);
+	return statement;
 }
 bool proof_validator::implies_elimination(int a,int b,int current){
-	string a = onlyFormula(str[a-1]);
-	string y = onlyFormula(str[b-1]);
-    string x=proof_validator::remove_brackets(a);
+	string u = only_statement(str[a]);
+	string y = only_statement(str[b]);
+    string x=proof_validator::remove_brackets(u);
 	int z=x.find(">");
 	string x1=x.substr(z+1);
 	string x2=x.substr(z+1,x.length()-(z+1));
 	string currentline=str[current-1];
-	currentline=onlyFormula(currentline);
+	currentline=only_statement(currentline);
 	if(x1.compare(y)!=0||x2.compare(currentline)!=0)
 		return false;
 	else
@@ -127,6 +146,12 @@ int main()
 	{
 		string temp = *ptr;
 		int index_1 = temp.find('/');
+		string prem = temp.substr(index_1+1,1);
+		if(obj.check_premise(prem))
+		{
+			//cout << "premise found" << endl;
+			continue;
+		}
 		int index_2 = temp.find('/', index_1+1);
 		//cout << index_1 << " " << index_2 << endl;
 		string temp_rule = temp.substr(index_1+1, (index_2-index_1-1));
@@ -143,7 +168,34 @@ int main()
 
 
     }
-    bool tf=obj.implies_elimination(1,2,3);
+
+		if(rule_index == 1)
+		{
+			//(a^b)/^i/1/2
+			int line_1, line_2 = 0;
+			int index_3 = (temp.find('/',index_2+1));
+			stringstream var1(temp.substr(index_2+1, index_3-index_2));
+			var1 >> line_1;
+			//cout << line_1 << endl;
+			stringstream var2(temp.substr(index_3+1));
+			var2 >> line_2;
+			//cout << line_2 << endl;
+			if(!(obj.and_introduction( line_1-1, line_2-1, temp)))
+				break;
+
+		}
+	}
+
+	// for( ptr=obj.str.begin();ptr!=obj.str.end();ptr++)
+ //    {
+ //        string temp=*ptr;
+ //        int x=removeSpaces(temp,temp.length());
+ //        temp.resize(x);
+ //        obj.str.at(v++)=temp;
+
+
+ //    }
+
 
 	return 0;
 }
