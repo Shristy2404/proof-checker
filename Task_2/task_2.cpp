@@ -31,8 +31,9 @@ public:
 	//void removeSpaces();
 	bool check_premise(string prem);
 	bool and_introduction( int line_1, int line_2, string line);
+	bool and_elimination(int line_1, string line, int rule_index);
 	string only_statement(string line);
-	void check_rules(int rule_index);
+	void check_rules();
 };
 
 //constructor to assign l to k; initialize proof length value 
@@ -74,7 +75,7 @@ string proof_validator::only_statement(string line)
 }
 
 //function to return an integer value corresponding to the rule which is to be checked 
-int return_rule(string rule)
+int proof_validator::return_rule(string rule)
 {
 	if(!(rule.compare("^i")))
 		return AND_INTRODUCTION;
@@ -93,16 +94,16 @@ int return_rule(string rule)
 	return -1;
 }
 
-void check_rules()
+void proof_validator::check_rules()
 {
 	vector<string>::iterator ptr;
 
-	for( ptr = obj.str.begin(); ptr!= obj.str.end(); ptr++)
+	for( ptr = str.begin(); ptr!= str.end(); ptr++)
 	{
 		string temp = *ptr;
 		int index_1 = temp.find('/');
 		string prem = temp.substr(index_1+1,1);
-		if(obj.check_premise(prem))
+		if(check_premise(prem))
 		{
 			continue;
 		}
@@ -113,18 +114,34 @@ void check_rules()
 		if(rule_index == 1)
 		{
 			int line_1, line_2 = 0;
-			int index_3 = (temp.find('/',index_2+1));
+			int index_3 = temp.find('/', index_2+1);
 			stringstream var1(temp.substr(index_2+1, index_3-index_2));
 			var1 >> line_1;
 			stringstream var2(temp.substr(index_3+1));
 			var2 >> line_2;
-			if(!(obj.and_introduction(line_1-1, line_2-1, temp)))
+			if(!(and_introduction(line_1-1, line_2-1, temp)))
 			{
 				flag=1;
 				break;
 			}
 		}
+		if(rule_index == 2 || rule_index == 3)
+		{
+			//cout << "and elimination begins" << endl;
+			int line_1 = 0;
+			stringstream var1(temp.substr(index_2+1));
+			var1 >> line_1;
+			//cout << line_1 << endl;
+			if(!(and_elimination(line_1-1, temp, rule_index)))
+			{
+				flag = 1;
+				break;
+			}
+			else
+				cout << "and elim valid" << endl;
+		}
 
+	}
 }
 
 //function to check if given line of proof is a premise or not 
@@ -147,7 +164,29 @@ bool proof_validator::and_introduction(int line_1, int line_2, string line)
 }
 
 //function to check and_elimination rule 
-bool proof_validator::and_elimination(int line_1, string line)
+bool proof_validator::and_elimination(int line_1, string line, int rule_index)
+{
+	string and_statement = remove_brackets(only_statement(str[line_1]));
+	//cout << and_statement << endl;
+	string eliminated = only_statement(line);
+	//cout << eliminated << endl;
+	int len = eliminated.length();
+	if(rule_index == 2)
+	{
+		string first_formula = and_statement.substr(0,len);
+		//cout << first_formula << endl;
+		if(!(first_formula.compare(eliminated)))
+			return true;
+	}
+	if(rule_index == 3)
+	{
+		string second_formula = and_statement.substr(and_statement.length()-len);
+		//cout << second_formula << endl;
+		if(!(second_formula.compare(eliminated)))
+			return true;
+	}	
+	return false;
+}
 
 
 int main()
@@ -162,7 +201,7 @@ int main()
 		cin >> temp;
 		obj.str.push_back(temp);
 	}
-	
+	obj.check_rules();
 
 	// for( ptr=obj.str.begin();ptr!=obj.str.end();ptr++)
  //    {
