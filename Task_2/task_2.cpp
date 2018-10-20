@@ -41,21 +41,18 @@ string remove_brackets(string rb)
 }
 
 
-void removeSpaces()
+int removeSpaces(string &a)
 {
-	for(int i=0;i<k;i++)
+    int count=0;
+	for(int i=0;i<a.length();i++)
 	{
-		int p=0;
-		for(int j=0;j<str[i].length();j++)
-		{
-			if(str[i][j]!=' ')
-			{
-				str[i][p++]=str[i][j];
-			}
+		if(a[i]!=' '){
+            a[count++]=a[i];
 		}
-		str[i].resize(p);
 	}
+	return count;
 }
+
 
 int return_rule(string rule)
 {
@@ -76,9 +73,27 @@ int return_rule(string rule)
 	return -1;
 }
 
+string onlyFormula(string &a){
+	string arr;
+	int count=0,count1=0;
+	for(int i=0;i<a.length();i++){
+	    //cout<<a[i]<<endl;
+		if(a[i]!='/'){
+		    //cout<<a[i]<<endl;
+		    arr.resize(++count1);
+		    arr[count++]=a[i];
+		    //cout<<arr<<endl;
+		}
+        else
+            break;
+	}
+	return arr;
+}
+
 int main()
-{	
+{
 	int lines;
+	int v=0;
 	cin >> lines;
 	proof_validator obj(lines);
 	for( int i=0; i<obj.k; i++)
@@ -99,6 +114,17 @@ int main()
 		//cout << temp_rule;
 		int rule_index = return_rule(temp_rule);
 		cout << rule_index;
-	} 
+	}
+	for( ptr=obj.str.begin();ptr!=obj.str.end();ptr++)
+    {
+        string temp=*ptr;
+        int x=removeSpaces(temp,temp.length());
+        temp.resize(x);
+        obj.str.at(v++)=temp;
+
+
+    }
+
 	return 0;
 }
+
