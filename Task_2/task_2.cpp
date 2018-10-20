@@ -4,7 +4,7 @@
 #include <vector>
 #include <iterator>
 #include <algorithm>
-#include <sstream> 
+#include <sstream>
 
 //defining macros for rule names 
 #define AND_INTRODUCTION 1
@@ -28,6 +28,8 @@ public:
 	string remove_brackets( string rb);
 	int return_rule(string rule);
 	proof_validator( int l);
+	void removeSpaces();
+	bool implies_elimination(int a,int b,int current);
 	//void removeSpaces();
 	bool check_premise(string prem);
 	bool and_introduction( int line_1, int line_2, string line);
@@ -137,8 +139,6 @@ void proof_validator::check_rules()
 				flag = 1;
 				break;
 			}
-			else
-				cout << "and elim valid" << endl;
 		}
 
 	}
@@ -188,6 +188,23 @@ bool proof_validator::and_elimination(int line_1, string line, int rule_index)
 	return false;
 }
 
+bool proof_validator::implies_elimination(int a,int b,int current)
+{
+	string u = only_statement(str[a]);
+	string y = only_statement(str[b]);
+    string x=proof_validator::remove_brackets(u);
+	int z=x.find(">");
+	string x1=x.substr(z+1);
+	string x2=x.substr(z+1,x.length()-(z+1));
+	string currentline=str[current-1];
+	currentline=only_statement(currentline);
+	if(x1.compare(y)!=0||x2.compare(currentline)!=0)
+		return false;
+	else
+		return true;
+}
+
+
 
 int main()
 {
@@ -203,6 +220,16 @@ int main()
 	}
 	obj.check_rules();
 
+	vector<string>::iterator ptr;
+
+	for( ptr=obj.str.begin();ptr!=obj.str.end();ptr++)
+    {
+        string temp=*ptr;
+        int x=removeSpaces(temp);
+        temp.resize(x);
+        obj.str.at(v++)=temp;
+    }
+
 	// for( ptr=obj.str.begin();ptr!=obj.str.end();ptr++)
  //    {
  //        string temp=*ptr;
@@ -212,6 +239,7 @@ int main()
 
 
  //    }
+
 
 	return 0;
 }
