@@ -268,28 +268,17 @@ int main()
 		getline(cin, temp);
 		obj.str.push_back(temp);
 	}
-	obj.check_rules();
+	
 	vector<string>::iterator ptr;
 
-	for( ptr=obj.str.begin();ptr!=obj.str.end();ptr++)
+	for(ptr=obj.str.begin();ptr!=obj.str.end();ptr++)
     {
         string temp=*ptr;
         int x=removeSpaces(temp);
         temp.resize(x);
         obj.str.at(v++)=temp;
     }
-
-	// for( ptr=obj.str.begin();ptr!=obj.str.end();ptr++)
- //    {
- //        string temp=*ptr;
- //        int x=removeSpaces(temp,temp.length());
- //        temp.resize(x);
- //        obj.str.at(v++)=temp;
-
-
- //    }
-
-
+    obj.check_rules();
 	return 0;
 }
 
