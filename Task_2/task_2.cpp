@@ -150,21 +150,25 @@ int proof_validator::check_rules()
 	    ++this_line;
 		string temp = *ptr;
 		int index_1 = temp.find('/');
+		int index_2 = temp.find('/', index_1+1);
+		string temp_rule = temp.substr(index_1+1, (index_2-index_1-1));
+		int rule_index = return_rule_index(temp_rule);
 		string prem = temp.substr(index_1+1,1);
+
 		if(check_premise(prem))
 		{
 			continue;
 		}
-		int rule_operator_pos = return_rule_operator_index(temp);
-		if(rule_operator_pos==-1)
+
+		if(rule_index == 1 || rule_index == 4 || rule_index == 5)
 		{
-			flag = -1;
+			int rule_operator_pos = return_rule_operator_index(temp);
+			if(rule_operator_pos==-1)
+			{
+			flag = 1;
 			return -1;
+			}
 		}
-		cout << rule_operator_pos << endl;
-		int index_2 = temp.find('/', index_1+1);
-		string temp_rule = temp.substr(index_1+1, (index_2-index_1-1));
-		int rule_index = return_rule_index(temp_rule);
 
 		if(rule_index == 1)
 		{
@@ -177,7 +181,7 @@ int proof_validator::check_rules()
 			if(!(and_introduction(line_1-1, line_2-1, temp)))
 			{
 				flag=1;
-				break;
+				return -1;
 			}
 		}
 		if(rule_index == 2 || rule_index == 3)
@@ -187,10 +191,10 @@ int proof_validator::check_rules()
 			stringstream var1(temp.substr(index_2+1));
 			var1 >> line_1;
 			//cout << line_1 << endl;
-			if(!(and_elimination(line_1-1, temp, rule_index)))
+			if(!(and_elimination(line_1-1, temp, rule_index, rule_operator_pos)))
 			{
 				flag = 1;
-				break;
+				return -1;
 			}
 		}
 
@@ -199,40 +203,44 @@ int proof_validator::check_rules()
 			int line_1=0;
 			stringstream var1(temp.substr(index_2+1));
 			var1>>line_1;
-			if(!(or_introduction(line_1-1, temp, rule_index)))
+			if(!(or_introduction(line_1-1, temp, rule_index, rule_operator_pos)))
 			{
 				flag=1;
-				break;
-
+				return -1;
 			}
 		}
 
-		if(rule_index==6){
+		if(rule_index==6)
+		{
             int line_1,line_2;
             int index_3=temp.find('/',index_2+1);
             stringstream var1(temp.substr(index_2+1,index_3-index_2-1));
             var1>>line_1;
             stringstream var2(temp.substr(index_3+1,temp.length()-index_3-1));
             var2>>line_2;
-            if(!(implies_elimination(line_1-1,line_2-1,this_line-1))){
+            if(!(implies_elimination(line_1-1,line_2-1,this_line-1, rule_operator_pos)))
+            {
                 flag=1;
-                break;
-            }
-		}
-		if(rule_index==7){
-            int line_1,line_2;
-            int index_3=temp.find('/',index_2+1);
-            stringstream var1(temp.substr(index_2+1,index_3-index_2-1));
-            var1>>line_1;
-            stringstream var2(temp.substr(index_3+1,temp.length()-index_3-1));
-            var2>>line_2;
-            if(!(modus_tollens(line_1-1,line_2-1,this_line-1))){
-                flag=1;
-                break;
+                return -1;
             }
 		}
 
+		if(rule_index==7)
+		{
+            int line_1,line_2;
+            int index_3=temp.find('/',index_2+1);
+            stringstream var1(temp.substr(index_2+1,index_3-index_2-1));
+            var1>>line_1;
+            stringstream var2(temp.substr(index_3+1,temp.length()-index_3-1));
+            var2>>line_2;
+            if(!(modus_tollens(line_1-1,line_2-1,this_line-1, rule_operator_pos)))
+            {
+                flag=1;
+                return -1;
+            }
+		}
 	}
+	return 0;
 }
 
 //function to check if given line of proof is a premise or not
@@ -255,7 +263,7 @@ bool proof_validator::and_introduction(int line_1, int line_2, string line)
 }
 
 //function to check and_elimination rule
-bool proof_validator::and_elimination(int line_1, string line, int rule_index)
+bool proof_validator::and_elimination(int line_1, string line, int rule_index, int rule_operator_pos)
 {
 	string and_statement = remove_brackets(only_statement(str[line_1]));
 	//cout << and_statement << endl;
@@ -264,14 +272,14 @@ bool proof_validator::and_elimination(int line_1, string line, int rule_index)
 	int len = eliminated.length();
 	if(rule_index == 2)
 	{
-		string first_formula = and_statement.substr(0,len);
+		string first_formula = and_statement.substr(0,rule_operator_pos-1);
 		//cout << first_formula << endl;
 		if(!(first_formula.compare(eliminated)))
 			return true;
 	}
 	if(rule_index == 3)
 	{
-		string second_formula = and_statement.substr(and_statement.length()-len);
+		string second_formula = and_statement.substr(rule_operator_pos+1);
 		//cout << second_formula << endl;
 		if(!(second_formula.compare(eliminated)))
 			return true;
@@ -282,15 +290,15 @@ bool proof_validator::and_elimination(int line_1, string line, int rule_index)
 /* function to check Or_Introduction rules
    
 */
-bool proof_validator::or_introduction(int line_1, string line, int rule_index)
+bool proof_validator::or_introduction(int line_1, string line, int rule_index, int rule_operator_pos)
 {  // cout<<"entered or_introduction"<<endl;
 
-	string or_beginner; 	/*!< The initial expression(line) on which we use or introduction rules  */
-	or_beginner = only_statement(str[line_1]);
+	string or_beginner; 	/*!< The initial expression(line) on which we use or introduction rules  */ 
+    or_beginner = only_statement(str[line_1]);
 
 	string or_statement;  	/*!< Or introduction statement line */
 	or_statement = remove_brackets(only_statement(line));
-	int index = return_rule_operator_index(line);
+	int index = rule_operator_pos;
 	///int len = or_beginner.length();
 	if(rule_index == 4)
 	{   //cout<<"entered or_introduction 1"<<endl;
@@ -306,7 +314,7 @@ bool proof_validator::or_introduction(int line_1, string line, int rule_index)
 	if(rule_index == 5)
 	{   //cout<<"entered or_introduction 2"<<endl;
 		string second_formula;	/*!< The substring from "V" till the end */
-		second_formula = or_statement.substr(index+1,or_statement.length()-1);
+		second_formula = or_statement.substr(index+1);
 
 		if((second_formula.compare(or_beginner))) { //cout<< "or elimination-2 correct"<<endl;
 			return true; }
@@ -314,36 +322,32 @@ bool proof_validator::or_introduction(int line_1, string line, int rule_index)
 	return false;
 }
 
-bool proof_validator::implies_elimination(int a,int b,int current)
+bool proof_validator::implies_elimination(int a,int b,int current, int rule_operator_pos)
 {
-	string u = only_statement(str[a]);
 	string y = only_statement(str[b]);
-    string x=proof_validator::remove_brackets(u);
-	int z=x.find(">");
-	string x1=x.substr(0,z);
-	string x2=x.substr(z+1,x.length()-(z+1));
-	string currentline=str[current];
+    string x = remove_brackets(only_statement(str[a]));
+	string x1 = x.substr(0,rule_operator_pos);
+	string x2 = x.substr(rule_operator_pos+1);
+	string currentline = str[current];
 	currentline=only_statement(currentline);
 	if(x1.compare(y)!=0||x2.compare(currentline)!=0)
 		return false;
 	else
 		return true;
 }
-bool proof_validator::modus_tollens(int a,int b,int current)
+bool proof_validator::modus_tollens(int a,int b,int current, int rule_operator_pos)
 {
-    string u = only_statement(str[a]);
 	string y = only_statement(str[b]);
-    string x=proof_validator::remove_brackets(u);
-	int z=x.find(">");
-	string x1=x.substr(0,z);
-	string x2=x.substr(z+1,x.length()-(z+1));
+    string x = remove_brackets(only_statement(str[a]));
+	string x1=x.substr(0,rule_operator_pos);
+	string x2=x.substr(rule_operator_pos+1);
 	string currentline=str[current];
 	currentline=only_statement(currentline);
 	string negation("~");
 	x1.insert(0,negation);
 	x2.insert(0,negation);
-	cout<<x1<<endl;
-	cout<<x2<<endl;
+	//cout<<x1<<endl;
+	//cout<<x2<<endl;
 	//string p="~"+x1;
 	//string q="~"+x2;
 	if((x2.compare(y)!=0)||(x1.compare(currentline)!=0))
@@ -376,6 +380,10 @@ int main()
         temp.resize(x);
         obj.str.at(v++)=temp;
     }
-    obj.check_rules();
+    int result = obj.check_rules();
+    if(result == -1 && flag == 1)
+    	cout << "Invalid proof" << endl;
+    else if(result == 0 && flag == 0)
+    	cout << "Valid proof" << endl;
 	return 0;
 }
