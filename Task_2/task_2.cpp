@@ -1,4 +1,4 @@
-//all header files 
+//all header files
 #include <iostream>
 #include <string>
 #include <vector>
@@ -6,7 +6,7 @@
 #include <algorithm>
 #include <sstream>
 
-//defining macros for rule names 
+//defining macros for rule names
 #define AND_INTRODUCTION 1
 #define AND_ELIMINATION_1 2
 #define AND_ELIMINATION_2 3
@@ -20,11 +20,11 @@ using namespace std;
 //declaring class proof_validator
 class proof_validator
 {
-	//class has a string vector and length of the proof as class variables 
+	//class has a string vector and length of the proof as class variables
 public:
 	std::vector<std::string> str;
 	int k;
-	int flag; 
+	int flag;
 	string remove_brackets(string rb);
 	int return_rule_index(string rule);
 	proof_validator(int l);
@@ -35,18 +35,20 @@ public:
 	bool and_introduction( int line_1, int line_2, string line);
 	bool and_elimination(int line_1, string line, int rule_index);
 	string only_statement(string line);
+	bool modus_tollens(int a,int b,int current);
 	int check_rules();
 	int return_rule_operator_index(string line);
+	bool or_introduction(int line_1, string line, int rule_index);
 };
 
-//constructor to assign l to k; initialize proof length value 
+//constructor to assign l to k; initialize proof length value
 proof_validator:: proof_validator(int l)
 {
 	k=l;
 	flag=0;
 }
 
-//function to remove first and last bracket from the string passed 
+//function to remove first and last bracket from the string passed
 string proof_validator::remove_brackets(string rb)
 {
 	int len = rb.length();
@@ -64,7 +66,7 @@ int proof_validator::return_rule_operator_index(string line)
 	string rule_left; int index=0;
 	int index_1 = line.find('/');
 	int index_2 = line.find('/', index_1+1);
-	string rule_right = line.substr(index_1+1,1); 
+	string rule_right = line.substr(index_1+1,1);
 	string rule_statement = remove_brackets(only_statement(line));
 	int opening_brackets=0; int closing_brackets =0;
 	if(rule_statement[0]!='(')
@@ -87,7 +89,7 @@ int proof_validator::return_rule_operator_index(string line)
 				break;
 			}
 		}
-		rule_left = rule_statement[index+1]; 
+		rule_left = rule_statement[index+1];
 	}
 	if(rule_right.compare(rule_left))
 	{
@@ -109,7 +111,7 @@ int removeSpaces(string &a)
 	return count;
 }
 
-//function to return the actual statement before the rule specifications in the proof line	
+//function to return the actual statement before the rule specifications in the proof line
 string proof_validator::only_statement(string line)
 {
 	string statement;
@@ -118,7 +120,7 @@ string proof_validator::only_statement(string line)
 	return statement;
 }
 
-//function to return an integer value corresponding to the rule which is to be checked 
+//function to return an integer value corresponding to the rule which is to be checked
 int proof_validator::return_rule_index(string rule)
 {
 	if(!(rule.compare("^i")))
@@ -141,9 +143,11 @@ int proof_validator::return_rule_index(string rule)
 int proof_validator::check_rules()
 {
 	vector<string>::iterator ptr;
+	int this_line=0;
 
 	for( ptr = str.begin(); ptr!= str.end(); ptr++)
 	{
+	    ++this_line;
 		string temp = *ptr;
 		int index_1 = temp.find('/');
 		string prem = temp.substr(index_1+1,1);
@@ -160,7 +164,7 @@ int proof_validator::check_rules()
 		cout << rule_operator_pos << endl;
 		int index_2 = temp.find('/', index_1+1);
 		string temp_rule = temp.substr(index_1+1, (index_2-index_1-1));
-		int rule_index = return_rule_index(temp_rule);	
+		int rule_index = return_rule_index(temp_rule);
 
 		if(rule_index == 1)
 		{
@@ -190,10 +194,48 @@ int proof_validator::check_rules()
 			}
 		}
 
+		if(rule_index == 4 || rule_index == 5)
+		{
+			int line_1=0;
+			stringstream var1(temp.substr(index_2+1));
+			var1>>line_1;
+			if(!(or_introduction(line_1-1, temp, rule_index)))
+			{
+				flag=1;
+				break;
+
+			}
+		}
+
+		if(rule_index==6){
+            int line_1,line_2;
+            int index_3=temp.find('/',index_2+1);
+            stringstream var1(temp.substr(index_2+1,index_3-index_2-1));
+            var1>>line_1;
+            stringstream var2(temp.substr(index_3+1,temp.length()-index_3-1));
+            var2>>line_2;
+            if(!(implies_elimination(line_1-1,line_2-1,this_line-1))){
+                flag=1;
+                break;
+            }
+		}
+		if(rule_index==7){
+            int line_1,line_2;
+            int index_3=temp.find('/',index_2+1);
+            stringstream var1(temp.substr(index_2+1,index_3-index_2-1));
+            var1>>line_1;
+            stringstream var2(temp.substr(index_3+1,temp.length()-index_3-1));
+            var2>>line_2;
+            if(!(modus_tollens(line_1-1,line_2-1,this_line-1))){
+                flag=1;
+                break;
+            }
+		}
+
 	}
 }
 
-//function to check if given line of proof is a premise or not 
+//function to check if given line of proof is a premise or not
 bool proof_validator::check_premise(string prem)
 {
 	if(!(prem.compare("P")))
@@ -201,7 +243,7 @@ bool proof_validator::check_premise(string prem)
 	return false;
 }
 
-//function to check and_introduction rule 
+//function to check and_introduction rule
 bool proof_validator::and_introduction(int line_1, int line_2, string line)
 {
     string statement_1 = remove_brackets(only_statement(line));
@@ -212,7 +254,7 @@ bool proof_validator::and_introduction(int line_1, int line_2, string line)
 	return false;
 }
 
-//function to check and_elimination rule 
+//function to check and_elimination rule
 bool proof_validator::and_elimination(int line_1, string line, int rule_index)
 {
 	string and_statement = remove_brackets(only_statement(str[line_1]));
@@ -233,6 +275,41 @@ bool proof_validator::and_elimination(int line_1, string line, int rule_index)
 		//cout << second_formula << endl;
 		if(!(second_formula.compare(eliminated)))
 			return true;
+	}
+	return false;
+}
+
+/* function to check Or_Introduction rules
+   
+*/
+bool proof_validator::or_introduction(int line_1, string line, int rule_index)
+{  // cout<<"entered or_introduction"<<endl;
+
+	string or_beginner; 	/*!< The initial expression(line) on which we use or introduction rules  */
+	or_beginner = only_statement(str[line_1]);
+
+	string or_statement;  	/*!< Or introduction statement line */
+	or_statement = remove_brackets(only_statement(line));
+	int index = return_rule_operator_index(line);
+	///int len = or_beginner.length();
+	if(rule_index == 4)
+	{   //cout<<"entered or_introduction 1"<<endl;
+		string first_formula;	/*!< The substring from beginning to "V" */
+		first_formula = or_statement.substr(0,index-1);
+		//cout<<first_formula;
+		//cout<<or_beginner;
+		//cout<<first_formula.compare(or_beginner);
+
+		if(!(first_formula.compare(or_beginner))) { // cout<< "or elimination-1 correct"<<endl;
+			return true;}
+	}
+	if(rule_index == 5)
+	{   //cout<<"entered or_introduction 2"<<endl;
+		string second_formula;	/*!< The substring from "V" till the end */
+		second_formula = or_statement.substr(index+1,or_statement.length()-1);
+
+		if((second_formula.compare(or_beginner))) { //cout<< "or elimination-2 correct"<<endl;
+			return true; }
 	}	
 	return false;
 }
@@ -243,16 +320,37 @@ bool proof_validator::implies_elimination(int a,int b,int current)
 	string y = only_statement(str[b]);
     string x=proof_validator::remove_brackets(u);
 	int z=x.find(">");
-	string x1=x.substr(z+1);
+	string x1=x.substr(0,z);
 	string x2=x.substr(z+1,x.length()-(z+1));
-	string currentline=str[current-1];
+	string currentline=str[current];
 	currentline=only_statement(currentline);
 	if(x1.compare(y)!=0||x2.compare(currentline)!=0)
 		return false;
 	else
 		return true;
 }
-
+bool proof_validator::modus_tollens(int a,int b,int current)
+{
+    string u = only_statement(str[a]);
+	string y = only_statement(str[b]);
+    string x=proof_validator::remove_brackets(u);
+	int z=x.find(">");
+	string x1=x.substr(0,z);
+	string x2=x.substr(z+1,x.length()-(z+1));
+	string currentline=str[current];
+	currentline=only_statement(currentline);
+	string negation("~");
+	x1.insert(0,negation);
+	x2.insert(0,negation);
+	cout<<x1<<endl;
+	cout<<x2<<endl;
+	//string p="~"+x1;
+	//string q="~"+x2;
+	if((x2.compare(y)!=0)||(x1.compare(currentline)!=0))
+        return false;
+    else
+        return true;
+}
 
 
 int main()
@@ -268,7 +366,7 @@ int main()
 		getline(cin, temp);
 		obj.str.push_back(temp);
 	}
-	
+
 	vector<string>::iterator ptr;
 
 	for(ptr=obj.str.begin();ptr!=obj.str.end();ptr++)
@@ -281,6 +379,3 @@ int main()
     obj.check_rules();
 	return 0;
 }
-
-//improve remove brackets 
-// make function which returns root rule index 
