@@ -25,9 +25,9 @@ public:
 	std::vector<std::string> str;
 	int k;
 	int flag;
-	string remove_brackets( string rb);
-	int return_rule(string rule);
-	proof_validator( int l);
+	string remove_brackets(string rb);
+	int return_rule_index(string rule);
+	proof_validator(int l);
 	void removeSpaces();
 	bool implies_elimination(int a,int b,int current);
 	//void removeSpaces();
@@ -35,8 +35,9 @@ public:
 	bool and_introduction( int line_1, int line_2, string line);
 	bool and_elimination(int line_1, string line, int rule_index);
 	string only_statement(string line);
-	void check_rules();
 	bool modus_tollens(int a,int b,int current);
+	int check_rules();
+	int return_rule_operator_index(string line);
 };
 
 //constructor to assign l to k; initialize proof length value
@@ -50,10 +51,51 @@ proof_validator:: proof_validator(int l)
 string proof_validator::remove_brackets(string rb)
 {
 	int len = rb.length();
+	if(rb[0]=='(' && rb[len-1]==')')
+	{
 	string temp = rb.substr(1,len-2);
 	rb = temp;
 	rb.resize(len-2);
+	}
 	return rb;
+}
+
+int proof_validator::return_rule_operator_index(string line)
+{
+	string rule_left; int index=0;
+	int index_1 = line.find('/');
+	int index_2 = line.find('/', index_1+1);
+	string rule_right = line.substr(index_1+1,1);
+	string rule_statement = remove_brackets(only_statement(line));
+	int opening_brackets=0; int closing_brackets =0;
+	if(rule_statement[0]!='(')
+	{
+		rule_left = rule_statement[1];
+		index=1;
+	}
+	else
+	{
+		for(int i=0; i<rule_statement.length(); i++)
+		{
+			char ch = rule_statement[i];
+			if(ch=='(')
+				opening_brackets++;
+			else if(ch==')')
+				closing_brackets++;
+			if(opening_brackets==closing_brackets)
+			{
+				index = i;
+				break;
+			}
+		}
+		rule_left = rule_statement[index+1];
+	}
+	if(rule_right.compare(rule_left))
+	{
+		flag =1;
+		return -1;
+	}
+	return index;
 }
 
 int removeSpaces(string &a)
@@ -78,7 +120,7 @@ string proof_validator::only_statement(string line)
 }
 
 //function to return an integer value corresponding to the rule which is to be checked
-int proof_validator::return_rule(string rule)
+int proof_validator::return_rule_index(string rule)
 {
 	if(!(rule.compare("^i")))
 		return AND_INTRODUCTION;
@@ -97,7 +139,7 @@ int proof_validator::return_rule(string rule)
 	return -1;
 }
 
-void proof_validator::check_rules()
+int proof_validator::check_rules()
 {
 	vector<string>::iterator ptr;
 	int this_line=0;
@@ -112,9 +154,16 @@ void proof_validator::check_rules()
 		{
 			continue;
 		}
+		int rule_operator_pos = return_rule_operator_index(temp);
+		if(rule_operator_pos==-1)
+		{
+			flag = -1;
+			return -1;
+		}
+		cout << rule_operator_pos << endl;
 		int index_2 = temp.find('/', index_1+1);
 		string temp_rule = temp.substr(index_1+1, (index_2-index_1-1));
-		int rule_index = return_rule(temp_rule);
+		int rule_index = return_rule_index(temp_rule);
 
 		if(rule_index == 1)
 		{
@@ -259,15 +308,14 @@ int main()
 	int lines;
 	int v=0;
 	cin >> lines;
+	cin.ignore();
 	proof_validator obj(lines);
 	for( int i=0; i<obj.k; i++)
 	{
 		string temp;
-		cin >> temp;
+		getline(cin, temp);
 		obj.str.push_back(temp);
 	}
-	//obj.check_rules();
-
 	vector<string>::iterator ptr;
 
 	for( ptr=obj.str.begin();ptr!=obj.str.end();ptr++)
@@ -278,19 +326,5 @@ int main()
         obj.str.at(v++)=temp;
     }
     obj.check_rules();
-    cout<<obj.flag;
-
-	// for( ptr=obj.str.begin();ptr!=obj.str.end();ptr++)
- //    {
- //        string temp=*ptr;
- //        int x=removeSpaces(temp,temp.length());
- //        temp.resize(x);
- //        obj.str.at(v++)=temp;
-
-
- //    }
-
-
 	return 0;
 }
-
