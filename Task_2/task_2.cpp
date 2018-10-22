@@ -29,16 +29,16 @@ public:
 	int return_rule_index(string rule);
 	proof_validator(int l);
 	void removeSpaces();
-	bool implies_elimination(int a,int b,int current);
+	bool implies_elimination(int a,int b,int current, int rule_operator_pos);
 	//void removeSpaces();
 	bool check_premise(string prem);
 	bool and_introduction( int line_1, int line_2, string line);
-	bool and_elimination(int line_1, string line, int rule_index);
+	bool and_elimination(int line_1, string line, int rule_index, int rule_operator_pos);
 	string only_statement(string line);
-	bool modus_tollens(int a,int b,int current);
+	bool modus_tollens(int a,int b,int current, int rule_operator_pos);
 	int check_rules();
 	int return_rule_operator_index(string line);
-	bool or_introduction(int line_1, string line, int rule_index);
+	bool or_introduction(int line_1, string line, int rule_index, int rule_operator_pos);
 };
 
 //constructor to assign l to k; initialize proof length value
@@ -154,6 +154,7 @@ int proof_validator::check_rules()
 		string temp_rule = temp.substr(index_1+1, (index_2-index_1-1));
 		int rule_index = return_rule_index(temp_rule);
 		string prem = temp.substr(index_1+1,1);
+		int rule_operator_pos = return_rule_operator_index(temp);
 
 		if(check_premise(prem))
 		{
@@ -162,7 +163,6 @@ int proof_validator::check_rules()
 
 		if(rule_index == 1 || rule_index == 4 || rule_index == 5)
 		{
-			int rule_operator_pos = return_rule_operator_index(temp);
 			if(rule_operator_pos==-1)
 			{
 			flag = 1;
@@ -381,9 +381,9 @@ int main()
         obj.str.at(v++)=temp;
     }
     int result = obj.check_rules();
-    if(result == -1 && flag == 1)
+    if(result == -1 && obj.flag == 1)
     	cout << "Invalid proof" << endl;
-    else if(result == 0 && flag == 0)
+    else if(result == 0 && obj.flag == 0)
     	cout << "Valid proof" << endl;
 	return 0;
 }
