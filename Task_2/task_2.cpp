@@ -44,7 +44,7 @@ public:
 	bool check_premise(string prem);
 	bool and_introduction( int line_1, int line_2, string line);
 	bool and_elimination(int line_1, string line, int rule_index);
-	bool or_introduction(int line_1, string line, int rule_index, int rule_operator_pos);
+	bool or_introduction(int line_1, string line, int rule_index);
 	bool implies_elimination(int a,int b,int current);	
 	bool modus_tollens(int a,int b,int current);
 	int check_rules();	
@@ -126,7 +126,12 @@ int proof_validator::return_rule_operator_index(string line)
 		rule_left = rule_statement[1];
 		index=0;
 	}
-	else
+	if(rule_statement[0]=='~' && rule_statement[1]!='(')
+	{
+		rule_left = rule_statement[2];
+		index=1;
+	}
+	else if(rule_statement[0]=='(' || (rule_statement[0]=='~' && rule_statement[1]=='('))
 	{
 		for(int i=0; i<rule_statement.length(); i++)
 		{
@@ -167,7 +172,7 @@ int proof_validator::check_rules()
 		int index_1 = temp.find('/');
 		int index_2 = temp.find('/', index_1+1);
 		string temp_rule = temp.substr(index_1+1, (index_2-index_1-1));
-		cout << temp_rule << endl;
+		//cout << temp_rule << endl;
 		int rule_index = return_rule_index(temp_rule);
 		string prem = temp.substr(index_1+1,1);
 		int rule_operator_pos = return_rule_operator_index(temp);
@@ -221,7 +226,7 @@ int proof_validator::check_rules()
 			stringstream var1(temp.substr(index_2+1));
 			var1>>line_1;
 			cout << line_1 << endl;
-			if(!(or_introduction(line_1-1, temp, rule_index, rule_operator_pos)))
+			if(!(or_introduction(line_1-1, temp, rule_index)))
 			{
 				flag=1;
 				return -1;
@@ -257,6 +262,7 @@ int proof_validator::check_rules()
                 return -1;
             }
 		}
+		cout << "line" << this_line << "correct" << endl; 
 	}
 	return 0;
 }
@@ -305,7 +311,7 @@ bool proof_validator::and_elimination(int line_1, string line, int rule_index)
 }
 
 //function to check or introduction rules
-bool proof_validator::or_introduction(int line_1, string line, int rule_index, int rule_operator_pos)
+bool proof_validator::or_introduction(int line_1, string line, int rule_index)
 {  
 	string or_beginner; 	/*!< The initial expression(line) on which we use or introduction rules  */ 
     or_beginner = only_statement(str[line_1]);
@@ -314,22 +320,22 @@ bool proof_validator::or_introduction(int line_1, string line, int rule_index, i
 	string or_statement;  	/*!< Or introduction statement line */
 	or_statement = remove_brackets(only_statement(line));
 	//cout << or_statement << endl;
-	int index = rule_operator_pos;
+	int rule_operator_pos = return_rule_operator_index(line);
 	//cout << rule_operator_pos << endl;
 	if(rule_index == 4)
-	{   
+	{   //cout<<"entered or-1";
 		string first_formula;	/*!< The substring from beginning to "V" */
-		first_formula = or_statement.substr(0,index);
+		first_formula = or_statement.substr(0,rule_operator_pos);
 		//cout << first_formula << endl;
 		if(!(first_formula.compare(or_beginner)))
 			return true;
 	}
 	if(rule_index == 5)
-	{  
+	{  	//cout<<"entered or-2";
 		string second_formula;	/*!< The substring from "V" till the end */
-		second_formula = or_statement.substr(index+1);
+		second_formula = or_statement.substr(rule_operator_pos+1);
 
-		if((second_formula.compare(or_beginner)))
+		if(!(second_formula.compare(or_beginner)))
 			return true; 
 	}	
 	return false;
@@ -360,6 +366,7 @@ bool proof_validator::modus_tollens(int a,int b,int current)
 {
 	int rule_operator_pos=return_rule_operator_index(str[a]);
 	cout<<rule_operator_pos<<endl;
+	cout << str[b] << endl;
 	string y = only_statement(str[b]);
 	cout<<y<<endl;
     string x = remove_brackets(only_statement(str[a]));
