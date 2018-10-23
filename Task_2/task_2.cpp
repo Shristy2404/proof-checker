@@ -23,22 +23,31 @@ class proof_validator
 	//class has a string vector and length of the proof as class variables
 public:
 	std::vector<std::string> str;
+	//class variables
+	
+	//number of lines in proof
 	int k;
+	//variable to signify is proof is valid or not 
 	int flag;
+
+	//constructor
+	proof_validator(int l);
+
+	//utility functions
 	string remove_brackets(string rb);
 	int return_rule_index(string rule);
-	proof_validator(int l);
-	void removeSpaces();
-	bool implies_elimination(int a,int b,int current, int rule_operator_pos);
-	//void removeSpaces();
+	int removeSpaces();
+	string only_statement(string line);
+	int return_rule_operator_index(string line);
+
+	//functions to check rules
 	bool check_premise(string prem);
 	bool and_introduction( int line_1, int line_2, string line);
 	bool and_elimination(int line_1, string line, int rule_index, int rule_operator_pos);
-	string only_statement(string line);
-	bool modus_tollens(int a,int b,int current, int rule_operator_pos);
-	int check_rules();
-	int return_rule_operator_index(string line);
 	bool or_introduction(int line_1, string line, int rule_index, int rule_operator_pos);
+	bool implies_elimination(int a,int b,int current, int rule_operator_pos);	
+	bool modus_tollens(int a,int b,int current, int rule_operator_pos);
+	int check_rules();	
 };
 
 //constructor to assign l to k; initialize proof length value
@@ -61,6 +70,49 @@ string proof_validator::remove_brackets(string rb)
 	return rb;
 }
 
+//function to return an integer value corresponding to the rule which is to be checked
+int proof_validator::return_rule_index(string rule)
+{
+	if(!(rule.compare("^i")))
+		return AND_INTRODUCTION;
+	else if(!(rule.compare("^e1")))
+		return AND_ELIMINATION_1;
+	else if(!(rule.compare("^e2")))
+		return AND_ELIMINATION_2;
+	else if(!(rule.compare("Vi1")))
+		return OR_INTRODUCTION_1;
+	else if(!(rule.compare("Vi2")))
+		return OR_INTRODUCTION_2;
+	else if(!(rule.compare(">e")))
+		return IMPLIES_ELIMINATION;
+	else if(!(rule.compare("MT")))
+		return MODUS_TOLLENS;
+	return -1;
+}
+
+//function to remove all spaces from a given passed string
+int removeSpaces(string &a)
+{
+    int count=0;
+	for(int i=0;i<a.length();i++)
+	{
+		if(a[i]!=' '){
+            a[count++]=a[i];
+		}
+	}
+	return count;
+}
+
+//function to return the actual statement before the rule specifications in the proof line
+string proof_validator::only_statement(string line)
+{
+	string statement;
+	int index = line.find('/');
+	statement = line.substr(0, index);
+	return statement;
+}
+
+//function which returns the root operator of a given expression; i.e. root of parse tree of expression
 int proof_validator::return_rule_operator_index(string line)
 {
 	string rule_left; int index=0;
@@ -99,47 +151,7 @@ int proof_validator::return_rule_operator_index(string line)
 	return index;
 }
 
-int removeSpaces(string &a)
-{
-    int count=0;
-	for(int i=0;i<a.length();i++)
-	{
-		if(a[i]!=' '){
-            a[count++]=a[i];
-		}
-	}
-	return count;
-}
-
-//function to return the actual statement before the rule specifications in the proof line
-string proof_validator::only_statement(string line)
-{
-	string statement;
-	int index = line.find('/');
-	statement = line.substr(0, index);
-	return statement;
-}
-
-//function to return an integer value corresponding to the rule which is to be checked
-int proof_validator::return_rule_index(string rule)
-{
-	if(!(rule.compare("^i")))
-		return AND_INTRODUCTION;
-	else if(!(rule.compare("^e1")))
-		return AND_ELIMINATION_1;
-	else if(!(rule.compare("^e2")))
-		return AND_ELIMINATION_2;
-	else if(!(rule.compare("Vi1")))
-		return OR_INTRODUCTION_1;
-	else if(!(rule.compare("Vi2")))
-		return OR_INTRODUCTION_2;
-	else if(!(rule.compare(">e")))
-		return IMPLIES_ELIMINATION;
-	else if(!(rule.compare("MT")))
-		return MODUS_TOLLENS;
-	return -1;
-}
-
+//
 int proof_validator::check_rules()
 {
 	vector<string>::iterator ptr;
@@ -266,62 +278,51 @@ bool proof_validator::and_introduction(int line_1, int line_2, string line)
 bool proof_validator::and_elimination(int line_1, string line, int rule_index, int rule_operator_pos)
 {
 	string and_statement = remove_brackets(only_statement(str[line_1]));
-	//cout << and_statement << endl;
 	string eliminated = only_statement(line);
-	//cout << eliminated << endl;
 	int len = eliminated.length();
 	if(rule_index == 2)
 	{
 		string first_formula = and_statement.substr(0,rule_operator_pos-1);
-		//cout << first_formula << endl;
 		if(!(first_formula.compare(eliminated)))
 			return true;
 	}
 	if(rule_index == 3)
 	{
 		string second_formula = and_statement.substr(rule_operator_pos+1);
-		//cout << second_formula << endl;
 		if(!(second_formula.compare(eliminated)))
 			return true;
 	}
 	return false;
 }
 
-/* function to check Or_Introduction rules
-   
-*/
+//function to check or_Introduction rules
 bool proof_validator::or_introduction(int line_1, string line, int rule_index, int rule_operator_pos)
-{  // cout<<"entered or_introduction"<<endl;
-
+{  
 	string or_beginner; 	/*!< The initial expression(line) on which we use or introduction rules  */ 
     or_beginner = only_statement(str[line_1]);
 
 	string or_statement;  	/*!< Or introduction statement line */
 	or_statement = remove_brackets(only_statement(line));
 	int index = rule_operator_pos;
-	///int len = or_beginner.length();
 	if(rule_index == 4)
-	{   //cout<<"entered or_introduction 1"<<endl;
+	{   
 		string first_formula;	/*!< The substring from beginning to "V" */
 		first_formula = or_statement.substr(0,index-1);
-		//cout<<first_formula;
-		//cout<<or_beginner;
-		//cout<<first_formula.compare(or_beginner);
-
-		if(!(first_formula.compare(or_beginner))) { // cout<< "or elimination-1 correct"<<endl;
-			return true;}
+		if(!(first_formula.compare(or_beginner)))
+			return true;
 	}
 	if(rule_index == 5)
-	{   //cout<<"entered or_introduction 2"<<endl;
+	{  
 		string second_formula;	/*!< The substring from "V" till the end */
 		second_formula = or_statement.substr(index+1);
 
-		if((second_formula.compare(or_beginner))) { //cout<< "or elimination-2 correct"<<endl;
-			return true; }
+		if((second_formula.compare(or_beginner)))
+			return true; 
 	}	
 	return false;
 }
 
+//function to check implies elimination rule
 bool proof_validator::implies_elimination(int a,int b,int current, int rule_operator_pos)
 {
 	string y = only_statement(str[b]);
@@ -335,6 +336,8 @@ bool proof_validator::implies_elimination(int a,int b,int current, int rule_oper
 	else
 		return true;
 }
+
+//function to check Modus Tollens rule
 bool proof_validator::modus_tollens(int a,int b,int current, int rule_operator_pos)
 {
 	string y = only_statement(str[b]);
@@ -346,10 +349,6 @@ bool proof_validator::modus_tollens(int a,int b,int current, int rule_operator_p
 	string negation("~");
 	x1.insert(0,negation);
 	x2.insert(0,negation);
-	//cout<<x1<<endl;
-	//cout<<x2<<endl;
-	//string p="~"+x1;
-	//string q="~"+x2;
 	if((x2.compare(y)!=0)||(x1.compare(currentline)!=0))
         return false;
     else
