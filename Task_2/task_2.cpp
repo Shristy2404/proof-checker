@@ -286,31 +286,60 @@ bool proof_validator::and_introduction(int line_1, int line_2, string line)
 	return false;
 }
 
-//function to check and_elimination rule
+/*!
+* \brief Function to check AND Elimination rule
+* \param line_1: The line on which or introduction is performed
+* line : The or-introduction line
+* rule_index : The index where '^' is present
+* \details 
+* 1. For AND elimination-1 we take the string before '^' 
+* 2. We compare this string with the string on which AND elimination is performed
+* 3. If it matches then we continue, else return invalid input. 
+* 4. For AND elimination-2 we take the string after '^' 
+* 5. We compare this string with the string on which AND elimination is performed
+* 5. If it matches then we continue, else return invalid input. 
+*/
 bool proof_validator::and_elimination(int line_1, string line, int rule_index)
 {
-	string and_statement = remove_brackets(only_statement(str[line_1]));
-	cout << and_statement << endl;
-	int rule_operator_pos = return_rule_operator_index(str[line_1]);
-	cout << rule_operator_pos << endl;
-	string eliminated = only_statement(line);
-	cout << eliminated << endl;
+	string and_statement; //!< The line on which AND elimination is performed.
+	and_statement = remove_brackets(only_statement(str[line_1]));
+	//cout << and_statement << endl;
+	int rule_operator_pos; //!< The index of '^'.
+	rule_operator_pos = return_rule_operator_index(str[line_1]);
+	//cout << rule_operator_pos << endl;
+	string eliminated; //!< The string which is eliminated.
+	eliminated = only_statement(line);
+	//cout << eliminated << endl;
 	if(rule_index == 2)
 	{
-		string first_formula = and_statement.substr(0,rule_operator_pos);
+		string first_formula; //!< The substring in and-statement till '^'.
+ 		first_formula = and_statement.substr(0,rule_operator_pos);
 		if(!(first_formula.compare(eliminated)))
 			return true;
 	}
 	if(rule_index == 3)
 	{
-		string second_formula = and_statement.substr(rule_operator_pos+1);
+		string second_formula; //!< The substring in and-statement from '^' to last.
+		second_formula = and_statement.substr(rule_operator_pos+1);
 		if(!(second_formula.compare(eliminated)))
 			return true;
 	}
 	return false;
 }
 
-//function to check or introduction rules
+/*!
+* \brief Function to check OR Introduction rule
+* \param line_1: The line on which or introduction is performed
+* line : The or-introduction line
+* rule_index : The index where 'V' is present
+* \details 
+* 1. For OR introduction-1 we take the string before 'V' 
+* 2. We compare this string with the string on which OR introduction is performed
+* 3. If it matches then we continue, else return invalid input. 
+* 4. For OR introduction-2 we take the string after 'V' 
+* 5. We compare this string with the string on which OR introduction is performed
+* 5. If it matches then we continue, else return invalid input. 
+*/
 bool proof_validator::or_introduction(int line_1, string line, int rule_index)
 {  
 	string or_beginner; 	/*!< The initial expression(line) on which we use or introduction rules  */ 
