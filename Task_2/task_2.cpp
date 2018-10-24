@@ -126,7 +126,7 @@ int proof_validator::return_rule_index(string rule)
 
 /*! 
  * \brief Function to remove all spaces from a given passed string
- * \param string rrule string which is the rule that has been implemented in that particular line
+ * \param string rule string which is the rule that has been implemented in that particular line
  * \details It compares the received string with the permitted rules and returns the matching macro value for the 
  * obtained rule, if no option matches, it returns -1.  
  */
@@ -210,10 +210,8 @@ int proof_validator::return_rule_operator_index(string line)
 
 /*! 
  * \brief Main driver function to check the proof line by line, if any line is wrong, it returns -1 
- * \details The function checks different possible scenarios for the expression which can be received. If the expression still 
- * has parantheses after removing the outermost parantheses, it counts upto that index in the string where the number of opening
- * and closing brackets become equal and returns that index. Else it returns 1 or 2 depending on whether the first atom has a 
- * negation or not. 
+ * \details The function extracts the rule index and calls the appropriate rule_checking function to check that line. All the
+ * required functions are called corresponding to whatever rule index is received for that particular line. 
  */ 
 int proof_validator::check_rules()
 {
@@ -276,7 +274,7 @@ int proof_validator::check_rules()
 		{
 			int line_1=0;
 			stringstream var1(temp.substr(index_2+1));
-			var1>>line_1;
+			var1 >> line_1;
 			cout << line_1 << endl;
 			if(!(or_introduction(line_1-1, temp, rule_index)))
 			{
@@ -318,7 +316,12 @@ int proof_validator::check_rules()
 	return 0;
 }
 
-//function to check if given line of proof is a premise or not
+/*! 
+ * \brief Function to check if given line of proof is a premise or not
+ * \param string prem Takes the string after first '/' for each line 
+ * \details The function checks if the passed string is 'P' or not i.e if the given line is a premise or not since that 
+ * is a special case. 
+ */ 
 bool proof_validator::check_premise(string prem)
 {
 	if(!(prem.compare("P")))
@@ -326,7 +329,17 @@ bool proof_validator::check_premise(string prem)
 	return false;
 }
 
-//function to check and_introduction rule
+/*! 
+ * \brief Function to check AND Introduction rule
+ * \param 
+ * 1. line_1: The line from where first statement of AND will come 
+ * 2. line_2: The line from where second statement of AND will come 
+ * 3. line: Line where AND Introduction has been concluded 
+ * \details 
+ * 1. This function extracts the AND Statement. 
+ * 2. Then it extracts the two statements from which it is claimed to be concluded.
+ * 3. Then it concatenates them, and checks if they are equal or not.  
+ */ 
 bool proof_validator::and_introduction(int line_1, int line_2, string line)
 {
     string statement_1 = remove_brackets(only_statement(line));
@@ -339,28 +352,26 @@ bool proof_validator::and_introduction(int line_1, int line_2, string line)
 
 /*!
 * \brief Function to check AND Elimination rule
-* \param line_1: The line on which or introduction is performed
-* line : The or-introduction line
-* rule_index : The index where '^' is present
+* \param 
+* 1. line_1: The line on which or introduction is performed
+* 2. line : The or-introduction line
+* 3. rule_index : The index where '^' is present
 * \details 
 * 1. For AND elimination-1 we take the string before '^' 
 * 2. We compare this string with the string on which AND elimination is performed
 * 3. If it matches then we continue, else return invalid input. 
 * 4. For AND elimination-2 we take the string after '^' 
 * 5. We compare this string with the string on which AND elimination is performed
-* 5. If it matches then we continue, else return invalid input. 
+* 6. If it matches then we continue, else return invalid input. 
 */
 bool proof_validator::and_elimination(int line_1, string line, int rule_index)
 {
 	string and_statement; //!< The line on which AND elimination is performed.
 	and_statement = remove_brackets(only_statement(str[line_1]));
-	//cout << and_statement << endl;
 	int rule_operator_pos; //!< The index of '^'.
 	rule_operator_pos = return_rule_operator_index(str[line_1]);
-	//cout << rule_operator_pos << endl;
 	string eliminated; //!< The string which is eliminated.
 	eliminated = only_statement(line);
-	//cout << eliminated << endl;
 	if(rule_index == 2)
 	{
 		string first_formula; //!< The substring in and-statement till '^'.
@@ -380,41 +391,34 @@ bool proof_validator::and_elimination(int line_1, string line, int rule_index)
 
 /*!
 * \brief Function to check OR Introduction rule
-* \param line_1: The line on which or introduction is performed
-* line : The or-introduction line
-* rule_index : The index where 'V' is present
+* \param 
+* 1. line_1: The line on which or introduction is performed
+* 2. line : The or-introduction line
+* 3. rule_index : The index where 'V' is present
 * \details 
 * 1. For OR introduction-1 we take the string before 'V' 
 * 2. We compare this string with the string on which OR introduction is performed
 * 3. If it matches then we continue, else return invalid input. 
 * 4. For OR introduction-2 we take the string after 'V' 
 * 5. We compare this string with the string on which OR introduction is performed
-* 5. If it matches then we continue, else return invalid input. 
+* 6. If it matches then we continue, else return invalid input. 
 */
 bool proof_validator::or_introduction(int line_1, string line, int rule_index)
 {  
-	string or_beginner; 	/*!< The initial expression(line) on which we use or introduction rules  */ 
-    or_beginner = only_statement(str[line_1]);
-    //cout << or_beginner << endl;
-
-	string or_statement;  	/*!< Or introduction statement line */
-	or_statement = remove_brackets(only_statement(line));
-	//cout << or_statement << endl;
+	string or_beginner = only_statement(str[line_1]); /*!< The initial expression(line) on which we use or introduction rules */ 
+	string or_statement = remove_brackets(only_statement(line)); /*!< Or introduction statement line */
 	int rule_operator_pos = return_rule_operator_index(line);
-	//cout << rule_operator_pos << endl;
 	if(rule_index == 4)
-	{   //cout<<"entered or-1";
+	{  
 		string first_formula;	/*!< The substring from beginning to "V" */
 		first_formula = or_statement.substr(0,rule_operator_pos);
-		//cout << first_formula << endl;
 		if(!(first_formula.compare(or_beginner)))
 			return true;
 	}
 	if(rule_index == 5)
-	{  	//cout<<"entered or-2";
+	{  	
 		string second_formula;	/*!< The substring from "V" till the end */
 		second_formula = or_statement.substr(rule_operator_pos+1);
-
 		if(!(second_formula.compare(or_beginner)))
 			return true; 
 	}	
@@ -456,7 +460,12 @@ bool proof_validator::modus_tollens(int a,int b,int current)
         return true;
 }
 
-
+/*!
+* \brief main() function where execution begins
+* \details The function accepts the number of lines first and adds them to the vector defined as class variable. Then a 
+* iterator object iterates over the vector and removes spaces from all the lines. Then the function just calls check_rules()
+* function. If '-1' is received, it is an invalid proof, else a valid proof.
+*/
 int main()
 {
 	int lines;
