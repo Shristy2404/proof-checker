@@ -38,7 +38,7 @@ int precedence(char c)
 */
 void infixToPostfix(string input)
 {
-	std::stack<char> expression_stack;
+	std::stack<char> expression_stack; //!< Creating a character stack
 	expression_stack.push('\0');
 	
 	int len = input.length(); //!< Length of input string
@@ -82,6 +82,10 @@ void infixToPostfix(string input)
 	cout << output <<endl;
 }
 
+/*!
+* \brief Create node with value and 2 pointers left and right
+*/
+
 
 struct node
 {
@@ -89,6 +93,10 @@ struct node
 	node *left, *right;
 };
 
+/*!
+* \brief A function to return a node pointer
+* \param char ch : It is the value of the pointer taken from output string
+*/
 node* create_node(char ch)
 {
 	node *temp = new node;
@@ -98,6 +106,10 @@ node* create_node(char ch)
 	return temp;
 }
 
+/*!
+* \brief A function to check if the scanned character is an operator or not
+* \param char ch: Takes a character from string output
+*/
 bool is_operator(char ch)
 {
 	if(ch == '^' || ch == 'V' || ch == '>' || ch == '~')
@@ -105,23 +117,17 @@ bool is_operator(char ch)
 	return false;
 }
 
-/*!
- * \brief Function generates the tree from a given postfix expression
- * \param string s takes the input postfix expression
- * \details
- * 1. Scan the postfix expression from left to right.
- * 2. If the character found is not an operator, we push it in the stack. 
- * 3. If the character found is an operator, we create a new node instance and pop top two elements from stack and make them 
- * as children of the new node. 
- * 4. Then we push this new node in the stack so that the whole instance can be popped the next time a node is encountered.
- * 5. Thus the tree is constructed in the stack. 
- * 6. We return the pointer to the root node, which will be used for further traversal of the tree. 
-*/
+
 node* construct_tree(string str)
 {
+
+	stack<node *> tree_stack; //!< Creating a pointer stack
+	node *t;//!< Creating a node pointer
+	*temp_right;//!< Creating a pointer that points to the right of the node
+	temp_left;//!< Creating a pointer that points to the left of the node
+
 	stack<node *> tree_stack; 
 	node *t, *temp_right, *temp_left;
-
 	for(int i=0; i<str.length(); i++)
 	{
 		if(!(is_operator(str[i])))
@@ -147,6 +153,20 @@ node* construct_tree(string str)
 	return t;
 }
 
+ 
+
+/*! 
+* \brief Functon to print infix expression
+* \param node *t : Node of the tree
+* \details
+* 1. We traverse from the root.
+* 2. Go to the left subtree and go to it's left subtree again if it's exist.
+* 3. Finally reach the left most leaf print it and go to it's root.
+* 4. Print the root and repeat 2 and 3.
+*/
+
+
+
 
 void inorder(node *t)
 { 
@@ -167,7 +187,7 @@ void inorder(node *t)
 int main() 
 {	
 	cin.ignore();
-	string expression;
+	string expression;//!< The input expression (infix)
 	getline(cin,expression);
 	infixToPostfix(expression);
 	node *temp;
