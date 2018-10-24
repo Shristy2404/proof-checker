@@ -1,8 +1,5 @@
 var searchData=
 [
-  ['remove_5fbrackets',['remove_brackets',['../classproof__validator.html#afca0153f084e487a35ce4f5a05c3e0d8',1,'proof_validator']]],
-  ['removespaces',['removeSpaces',['../classproof__validator.html#af4f40b28f83290ce0dc927665bd93520',1,'proof_validator::removeSpaces()'],['../task__2_8cpp.html#a8ba5f13c9160e52027f42da22f3cedec',1,'removeSpaces():&#160;task_2.cpp']]],
-  ['return_5frule_5findex',['return_rule_index',['../classproof__validator.html#a28c05e6621261c6bec0a5af4e8811d37',1,'proof_validator']]],
-  ['return_5frule_5foperator_5findex',['return_rule_operator_index',['../classproof__validator.html#a6b86f61459ad9213f03c6617d4602671',1,'proof_validator']]],
-  ['right',['right',['../structnode.html#afafc72df7ea24f355ad3abb32a331689',1,'node::right()'],['../ques2_8cpp.html#ae274df3c21d52825564b9811fa84f71b',1,'right():&#160;ques2.cpp']]]
+  ['s',['s',['../task__1_8cpp.html#a2016384928a1b557c51ef62964decea5',1,'task_1.cpp']]],
+  ['str',['str',['../classproof__validator.html#a609da5066268d76ef1d693c9bab149b6',1,'proof_validator']]]
 ];

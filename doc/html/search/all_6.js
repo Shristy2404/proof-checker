@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['main',['main',['../newpart1_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4',1,'main():&#160;newpart1.cpp'],['../part1_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4',1,'main():&#160;part1.cpp'],['../ques2_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4',1,'main():&#160;ques2.cpp'],['../task__2_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4',1,'main():&#160;task_2.cpp']]],
+  ['main',['main',['../task__1_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4',1,'main():&#160;task_1.cpp'],['../task__2_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4',1,'main():&#160;task_2.cpp']]],
   ['modus_5ftollens',['modus_tollens',['../classproof__validator.html#ab859c9072e7c2370a6a31298ea14424d',1,'proof_validator::modus_tollens()'],['../task__2_8cpp.html#ae327ac5c30065d3f1049eaebad42ff71',1,'MODUS_TOLLENS():&#160;task_2.cpp']]]
 ];

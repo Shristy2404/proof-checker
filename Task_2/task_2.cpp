@@ -1,3 +1,26 @@
+/*! 
+ * \author Vishwangi Shah, Shravanti, Shristy Kapoor
+ * \version 1.0
+ * \date 24-10-2018
+ * \copyright GNU Public License 
+ * \mainpage Logic in Computer Science Project: A simple proof-checker
+ * \section intro_sec Introduction
+ * This code was developed as a part of as assignment for Logic in Computer Science. It is a simple proof-checker which takes 
+ * in a proof and outputs if the proof is valid or not. 
+ * \section detail_sec Details
+ * This code takes in the number of lines in your proof and the lines as inputs, and returns if the proof is valid or not. 
+ * \subsection Rules Checked 
+ * Rules allowed in the proof are : 
+ * 1) Premise 
+ * 2) And Introduction 
+ * 3) And Elimination 
+ * 4) Or Introduction 
+ * 5) Implies Elimination 
+ * 6) Modus Tollens 
+ * \section comp_sec Compilation
+ * You can compile this code by `g++ task_2.cpp` and execute it by `./a.out` 
+ */  
+
 //all header files
 #include <iostream>
 #include <string>
@@ -25,10 +48,8 @@ public:
 	std::vector<std::string> str;
 	//class variables
 	
-	//number of lines in proof
+	//! Number of lines in proof
 	int k;
-	//variable to signify is proof is valid or not 
-	int flag;
 
 	//constructor
 	proof_validator(int l);
@@ -50,14 +71,22 @@ public:
 	int check_rules();	
 };
 
-//constructor to assign l to k; initialize proof length value
+/*! 
+ * \brief Constructor to assign l to k, i.e., initialize proof length value
+ * \param l number of lines in the proof 
+ */ 
 proof_validator:: proof_validator(int l)
 {
 	k=l;
 	flag=0;
 }
 
-//function to remove first and last bracket from the string passed
+/*! 
+ * \brief Function to remove first and last bracket from the string passed
+ * \param string rb string from which you need to remove the first and last bracket 
+ * \details It checks if the first and last characters of the string are '(' and ')' respectively. If yes, it returns 
+ * the substring between these two positions after resizing, else, returns the same string which was received as input. 
+ */ 
 string proof_validator::remove_brackets(string rb)
 {
 	int len = rb.length();
@@ -70,7 +99,12 @@ string proof_validator::remove_brackets(string rb)
 	return rb;
 }
 
-//function to return an integer value corresponding to the rule which is to be checked
+/*! 
+ * \brief Function to return an integer value corresponding to the rule which is to be checked
+ * \param string rule string which is the rule that has been implemented in that particular line
+ * \details It compares the received string with the permitted rules and returns the matching macro value for the 
+ * obtained rule, if no option matches, it returns -1.  
+ */ 
 int proof_validator::return_rule_index(string rule)
 {
 	if(!(rule.compare("^i")))
@@ -90,15 +124,19 @@ int proof_validator::return_rule_index(string rule)
 	return -1;
 }
 
-//function to remove all spaces from a given passed string
+/*! 
+ * \brief Function to remove all spaces from a given passed string
+ * \param string rrule string which is the rule that has been implemented in that particular line
+ * \details It compares the received string with the permitted rules and returns the matching macro value for the 
+ * obtained rule, if no option matches, it returns -1.  
+ */
 int removeSpaces(string &a)
 {
     int count=0;
 	for(int i=0;i<a.length();i++)
 	{
-		if(a[i]!=' '){
-            a[count++]=a[i];
-		}
+		if(a[i]!=' ')
+        	a[count++]=a[i];
 	}
 	return count;
 }
