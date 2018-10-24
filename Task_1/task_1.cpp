@@ -4,8 +4,8 @@
 using namespace std;
 
 // sravanthi's part
-string s;
-string output;
+string s; //!< The string containing the infix expression(given)
+string output; //!< The string containing the final postfix expression
 int precedence(char c)
 {
 	char ch=c;
@@ -20,13 +20,30 @@ int precedence(char c)
 	else return -1;
 	
 }
+
+/*!
+ * \brief Function gives the postfix expression when given an infix expression
+ * \param string s takes the input infix expression
+ * \details
+ * 1. Scan the infix expression from left to right.
+ * 2. If the scanned character is an operand, stire in output string.
+ * 3. Else,
+ * …..3.1 If the precedence of the scanned operator is greater than the precedence of the operator in the stack(or the stack is empty), push it.
+ * …..3.2 Else, Pop the operator from the stack until the precedence of the scanned operator is less-equal to the precedence of the operator  *  residing on the top of the stack. Push the scanned operator to the stack.
+ * 4. If the scanned character is an ‘(‘, push it to the stack.
+ * 5. If the scanned character is an ‘)’, pop and store in output string from the stack until an ‘(‘ is encountered.
+ * 6. Repeat steps 2-6 until infix expression is scanned.
+ * 7. Pop and store in the output string from the stack until it is not empty.
+ * 8. Print the output string.
+*/
 void infixToPostfix(string s)
 {
 	std::stack<char> myStack;
 	myStack.push('\0');
 	
 	
-	int l=s.length();
+	int l; //!< Length of input string
+	l=s.length();
 	int j=0;
 	for(int i=0;i<l;i++) 
 	{
