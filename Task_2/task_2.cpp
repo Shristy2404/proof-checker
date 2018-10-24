@@ -141,7 +141,11 @@ int removeSpaces(string &a)
 	return count;
 }
 
-//function to return the actual statement before the rule specifications in the proof line
+/*! 
+ * \brief Function to return the actual statement before the rule specifications in the proof line
+ * \param string line string which is the line whose concluded or claimed statement we want
+ * \details It extracts the index of the first '/' character and returns the subtring upto that index  
+ */
 string proof_validator::only_statement(string line)
 {
 	string statement;
@@ -150,7 +154,14 @@ string proof_validator::only_statement(string line)
 	return statement;
 }
 
-//function which returns the root operator of a given expression; i.e. root of parse tree of expression
+/*! 
+ * \brief Function which returns the root operator of a given expression; i.e. root of parse tree of expression
+ * \param string line string which is the line whose root operator we need 
+ * \details The function checks different possible scenarios for the expression which can be received. If the expression still 
+ * has parantheses after removing the outermost parantheses, it counts upto that index in the string where the number of opening
+ * and closing brackets become equal and returns that index. Else it returns 1 or 2 depending on whether the first atom has a 
+ * negation or not. 
+ */ 
 int proof_validator::return_rule_operator_index(string line)
 {
 	string rule_left; int index=0;
@@ -197,7 +208,13 @@ int proof_validator::return_rule_operator_index(string line)
 	return (index+1);
 }
 
-//
+/*! 
+ * \brief Main driver function to check the proof line by line, if any line is wrong, it returns -1 
+ * \details The function checks different possible scenarios for the expression which can be received. If the expression still 
+ * has parantheses after removing the outermost parantheses, it counts upto that index in the string where the number of opening
+ * and closing brackets become equal and returns that index. Else it returns 1 or 2 depending on whether the first atom has a 
+ * negation or not. 
+ */ 
 int proof_validator::check_rules()
 {
 	vector<string>::iterator ptr;
@@ -210,7 +227,6 @@ int proof_validator::check_rules()
 		int index_1 = temp.find('/');
 		int index_2 = temp.find('/', index_1+1);
 		string temp_rule = temp.substr(index_1+1, (index_2-index_1-1));
-		//cout << temp_rule << endl;
 		int rule_index = return_rule_index(temp_rule);
 		string prem = temp.substr(index_1+1,1);
 		int rule_operator_pos = return_rule_operator_index(temp);
@@ -245,12 +261,10 @@ int proof_validator::check_rules()
 		}
 		if(rule_index == 2 || rule_index == 3)
 		{
-			//cout << "and elimination begins" << endl;
 			int line_1 = 0;
 			stringstream var1(temp.substr(index_2+1));
 			var1 >> line_1;
 			cout << line_1 << endl;
-			//cout << line_1 << endl;
 			if(!(and_elimination(line_1-1, temp, rule_index)))
 			{
 				flag = 1;
@@ -299,8 +313,7 @@ int proof_validator::check_rules()
                 flag=1;
                 return -1;
             }
-		}
-		cout << "line" << this_line << "correct" << endl; 
+		} 
 	}
 	return 0;
 }
