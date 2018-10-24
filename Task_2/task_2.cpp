@@ -166,13 +166,14 @@ string proof_validator::only_statement(string line)
  */
 int proof_validator::return_rule_operator_index(string line)
 {
-	string rule_left;
-	int index=0;
-	int index_1 = line.find('/');
-	int index_2 = line.find('/', index_1+1);
-	string rule_right = line.substr(index_1+1,1);
-	string rule_statement = remove_brackets(only_statement(line));
-	int opening_brackets=0; int closing_brackets =0;
+	string rule_left; /*!< Operator in the propositional formula */
+	int index=0; /*!< Index where '(' equals ')' */
+	int index_1 = line.find('/'); /*!< First occurence of '/' */
+	int index_2 = line.find('/', index_1+1); /*!< Second occurence of '/' */
+	string rule_right = line.substr(index_1+1,1); /*!< Operator used in the rule */
+	string rule_statement = remove_brackets(only_statement(line)); /*!< Propositional formula in the line */
+	int opening_brackets=0; /*!< Number of '(' */
+	int closing_brackets =0; /*!< Number of ')' */
 	if(rule_statement[0]!='(')
 	{
 		rule_left = rule_statement[1];
@@ -218,19 +219,19 @@ int proof_validator::return_rule_operator_index(string line)
  */
 int proof_validator::check_rules()
 {
-	vector<string>::iterator ptr;
-	int this_line=0;
+	vector<string>::iterator ptr; /*!< Defining an iterator object for the vector */
+	int this_line=0; /*!< Index of current line */
 
 	for( ptr = str.begin(); ptr!= str.end(); ptr++)
 	{
 	    ++this_line;
-		string temp = *ptr;
-		int index_1 = temp.find('/');
-		int index_2 = temp.find('/', index_1+1);
-		string temp_rule = temp.substr(index_1+1, (index_2-index_1-1));
-		int rule_index = return_rule_index(temp_rule);
-		string prem = temp.substr(index_1+1,1);
-		int rule_operator_pos = return_rule_operator_index(temp);
+		string temp = *ptr; /*!< Current line */
+		int index_1 = temp.find('/'); /*!< Index of first '/' */
+		int index_2 = temp.find('/', index_1+1); /*!< Index of second '/' */
+		string temp_rule = temp.substr(index_1+1, (index_2-index_1-1)); /*!< Rule used in the line */
+		int rule_index = return_rule_index(temp_rule); /*!< Index assigned to that rule */
+		string prem = temp.substr(index_1+1,1); /*!< First char after first '/' */
+		int rule_operator_pos = return_rule_operator_index(temp); /*!< Index of the operator in the line */
 
 		if(check_premise(prem))
 		{
@@ -248,11 +249,12 @@ int proof_validator::check_rules()
 
 		if(rule_index == 1)
 		{
-			int line_1, line_2 = 0;
-			int index_3 = temp.find('/', index_2+1);
-			stringstream var1(temp.substr(index_2+1, index_3-index_2));
+			int line_1=0; /*!< First line number used in the rule */
+			int line_2=0; /*!< Second line number used in the rule */
+			int index_3 = temp.find('/', index_2+1); /*!< Third occurence of '/' */
+			stringstream var1(temp.substr(index_2+1, index_3-index_2)); /*!< First line number used in the rule in string format */
 			var1 >> line_1;
-			stringstream var2(temp.substr(index_3+1));
+			stringstream var2(temp.substr(index_3+1)); /*!< Second line number used in the rule in string formatm*/
 			var2 >> line_2;
 			if(!(and_introduction(line_1-1, line_2-1, temp)))
 			{
@@ -346,9 +348,9 @@ bool proof_validator::check_premise(string prem)
  */
 bool proof_validator::and_introduction(int line_1, int line_2, string line)
 {
-    string statement_1 = remove_brackets(only_statement(line));
-	string comp_1 = only_statement(str[line_1]) + "^" + only_statement(str[line_2]);
-	string comp_2 = only_statement(str[line_2]) + "^" + only_statement(str[line_1]);
+    string statement_1 = remove_brackets(only_statement(line)); /*!< Line in which and is introduced */
+	string comp_1 = only_statement(str[line_1]) + "^" + only_statement(str[line_2]); /*!< Introducing and on line 1 and line 2 */
+	string comp_2 = only_statement(str[line_2]) + "^" + only_statement(str[line_1]); /*!< Introducing and on line 2 and line 1 */
 	if( (!(statement_1.compare(comp_1))) || (!(statement_1.compare(comp_2))))
 		return true;
 	return false;
@@ -440,12 +442,6 @@ bool proof_validator::or_introduction(int line_1, string line, int rule_index)
  */
 bool proof_validator::implies_elimination(int a,int b,int current)
 {
-    string x = remove_brackets(only_statement(str[a]));
-    int rule_operator_pos=return_rule_operator_index(str[a]);
-	string y = only_statement(str[b]);
-	string x1 = x.substr(0,rule_operator_pos);
-	string x2 = x.substr(rule_operator_pos+1);
-	string currentline = str[current];
     string implies_statement = remove_brackets(only_statement(str[a])); /*!< Implies statement */
     //cout<<x<<endl;
     int rule_operator_pos=return_rule_operator_index(str[a]); /*!< Index of '>' in the implies statement. */
@@ -474,18 +470,6 @@ bool proof_validator::implies_elimination(int a,int b,int current)
  */
 bool proof_validator::modus_tollens(int a,int b,int current)
 {
-	int rule_operator_pos=return_rule_operator_index(str[a]);
-	string y = only_statement(str[b]);
-	cout<<y<<endl;
-    string x = remove_brackets(only_statement(str[a]));
-	string x1=x.substr(0,rule_operator_pos);
-	string x2=x.substr(rule_operator_pos+1);
-	string currentline=str[current];
-	currentline=only_statement(currentline);
-	string negation("~");
-	x1.insert(0,negation);
-	x2.insert(0,negation);
-	if((x2.compare(y)!=0)||(x1.compare(currentline)!=0))
 	int rule_operator_pos=return_rule_operator_index(str[a]); /*!< Index of '>' in the implies statement */
 	//cout<<rule_operator_pos<<endl;
 	//cout << str[b] << endl;
@@ -520,28 +504,28 @@ bool proof_validator::modus_tollens(int a,int b,int current)
 */
 int main()
 {
-	int lines;
-	int v=0;
+	int lines; /*!< Number of lines in the proof */
+	int v=0; /*!< Current index */
 	cin >> lines;
 	cin.ignore();
-	proof_validator obj(lines);
+	proof_validator obj(lines); /*!< Object of class proof_validator */
 	for( int i=0; i<obj.k; i++)
 	{
-		string temp;
+		string temp; /*!< Storing the inputted string */
 		getline(cin, temp);
 		obj.str.push_back(temp);
 	}
 
-	vector<string>::iterator ptr;
+	vector<string>::iterator ptr; /*!< Iterator object for the vector */
 
 	for(ptr=obj.str.begin();ptr!=obj.str.end();ptr++)
     {
-        string temp=*ptr;
-        int x=removeSpaces(temp);
+        string temp=*ptr; /*!< String pointed at by the iterator object */
+        int x=removeSpaces(temp); /*!< Number of elements in line with no space */
         temp.resize(x);
         obj.str.at(v++)=temp;
     }
-    int result = obj.check_rules();
+    int result = obj.check_rules(); /*!< Result after checking rules */
     if(result == -1)
     	cout << "Invalid proof" << endl;
     else if(result == 0)
