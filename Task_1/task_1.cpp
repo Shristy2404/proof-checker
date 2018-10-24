@@ -135,19 +135,24 @@ bool is_operator(char ch)
 */
 node* construct_tree(string str)
 {
-
 	stack<node *> tree_stack; //!< Creating a pointer stack
-	node *t;//!< Creating a node pointer
-	node *temp_right;//!< Creating a pointer that points to the right of the node
-	node *temp_left;//!< Creating a pointer that points to the left of the node
+	node *t; //!< Creating a node pointer
+	node *temp_right; //!< Creating a pointer that points to the right of the node
+	node *temp_left; //!< Creating a pointer that points to the left of the node
 
-	stack<node *> tree_stack; 
-	node *t, *temp_right, *temp_left;
 	for(int i=0; i<str.length(); i++)
 	{
 		if(!(is_operator(str[i])))
 		{
 			t=create_node(str[i]);
+			tree_stack.push(t);
+		}
+		else if(str[i]=='~')
+		{
+			t=create_node(str[i]);
+			temp_right = tree_stack.top();
+			tree_stack.pop();
+			t->right = temp_right;
 			tree_stack.push(t);
 		}
 		else
@@ -167,8 +172,6 @@ node* construct_tree(string str)
 	}
 	return t;
 }
-
- 
 
 /*! 
 * \brief Functon to print infix expression
