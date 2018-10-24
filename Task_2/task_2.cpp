@@ -345,15 +345,10 @@ bool proof_validator::or_introduction(int line_1, string line, int rule_index)
 bool proof_validator::implies_elimination(int a,int b,int current)
 {
     string x = remove_brackets(only_statement(str[a]));
-    //cout<<x<<endl;
     int rule_operator_pos=return_rule_operator_index(str[a]);
-    //cout<<rule_operator_pos<<endl;
 	string y = only_statement(str[b]);
-	//cout<<y<<endl;
 	string x1 = x.substr(0,rule_operator_pos);
-	//cout<<x1<<endl;
 	string x2 = x.substr(rule_operator_pos+1);
-	//cout<<x2<<endl;
 	string currentline = str[current];
 	currentline=only_statement(currentline);
 	if(x1.compare(y)!=0||x2.compare(currentline)!=0)
@@ -365,8 +360,6 @@ bool proof_validator::implies_elimination(int a,int b,int current)
 bool proof_validator::modus_tollens(int a,int b,int current)
 {
 	int rule_operator_pos=return_rule_operator_index(str[a]);
-	cout<<rule_operator_pos<<endl;
-	cout << str[b] << endl;
 	string y = only_statement(str[b]);
 	cout<<y<<endl;
     string x = remove_brackets(only_statement(str[a]));
@@ -374,16 +367,9 @@ bool proof_validator::modus_tollens(int a,int b,int current)
 	string x2=x.substr(rule_operator_pos+1);
 	string currentline=str[current];
 	currentline=only_statement(currentline);
-	cout<<currentline<<endl;
 	string negation("~");
 	x1.insert(0,negation);
 	x2.insert(0,negation);
-	cout<<x1<<endl;
-	cout<<x2<<endl;
-	//cout<<x1<<endl;
-	//cout<<x2<<endl;
-	//string p="~"+x1;
-	//string q="~"+x2;
 	if((x2.compare(y)!=0)||(x1.compare(currentline)!=0))
         return false;
     else
