@@ -81,7 +81,8 @@ void infixToPostfix(string input)
 	    }
 	cout << output <<endl;
 }
-// shristy's part
+
+
 struct node
 {
 	char val;
@@ -104,9 +105,21 @@ bool is_operator(char ch)
 	return false;
 }
 
+/*!
+ * \brief Function generates the tree from a given postfix expression
+ * \param string s takes the input postfix expression
+ * \details
+ * 1. Scan the postfix expression from left to right.
+ * 2. If the character found is not an operator, we push it in the stack. 
+ * 3. If the character found is an operator, we create a new node instance and pop top two elements from stack and make them 
+ * as children of the new node. 
+ * 4. Then we push this new node in the stack so that the whole instance can be popped the next time a node is encountered.
+ * 5. Thus the tree is constructed in the stack. 
+ * 6. We return the pointer to the root node, which will be used for further traversal of the tree. 
+*/
 node* construct_tree(string str)
 {
-	stack<node *> tree_stack;
+	stack<node *> tree_stack; 
 	node *t, *temp_right, *temp_left;
 
 	for(int i=0; i<str.length(); i++)
@@ -134,7 +147,7 @@ node* construct_tree(string str)
 	return t;
 }
 
-//vishu's part
+
 void inorder(node *t)
 { 
     if(t)
