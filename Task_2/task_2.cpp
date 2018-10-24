@@ -259,7 +259,7 @@ int proof_validator::check_rules()
 		}
 		if(rule_index == 2 || rule_index == 3)
 		{
-			int line_1 = 0;
+			int line_1 = 0; //!< The index of the line on which and-elimination is performed.
 			stringstream var1(temp.substr(index_2+1));
 			var1 >> line_1;
 			cout << line_1 << endl;
@@ -272,7 +272,7 @@ int proof_validator::check_rules()
 
 		if(rule_index == 4 || rule_index == 5)
 		{
-			int line_1=0;
+			int line_1=0; //!< The index of the line on which or-introduction is performed.
 			stringstream var1(temp.substr(index_2+1));
 			var1 >> line_1;
 			cout << line_1 << endl;
