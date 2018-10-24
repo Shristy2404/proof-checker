@@ -77,8 +77,7 @@ public:
  */
 proof_validator:: proof_validator(int l)
 {
-	k=l;
-	flag=0;
+	k = l;
 }
 
 
@@ -205,7 +204,6 @@ int proof_validator::return_rule_operator_index(string line)
 	{
 		if(rule_right.compare(rule_left))
 		{
-		flag =1;
 		return -1;
 		}
 	}
@@ -242,7 +240,6 @@ int proof_validator::check_rules()
 		{
 			if(rule_operator_pos==-1)
 			{
-			flag = 1;
 			return -1;
 			}
 		}
@@ -258,7 +255,6 @@ int proof_validator::check_rules()
 			var2 >> line_2;
 			if(!(and_introduction(line_1-1, line_2-1, temp)))
 			{
-				flag=1;
 				return -1;
 			}
 		}
@@ -269,8 +265,7 @@ int proof_validator::check_rules()
 			var1 >> line_1;
 			cout << line_1 << endl;
 			if(!(and_elimination(line_1-1, temp, rule_index)))
-			{
-				flag = 1;
+			{1;
 				return -1;
 			}
 		}
@@ -283,7 +278,6 @@ int proof_validator::check_rules()
 			cout << line_1 << endl;
 			if(!(or_introduction(line_1-1, temp, rule_index)))
 			{
-				flag=1;
 				return -1;
 			}
 		}
@@ -298,7 +292,7 @@ int proof_validator::check_rules()
             var2>>line_2;
             if(!(implies_elimination(line_1-1,line_2-1,this_line-1)))
             {
-                flag=1;
+           
                 return -1;
             }
 		}
@@ -313,7 +307,7 @@ int proof_validator::check_rules()
             var2>>line_2;
             if(!(modus_tollens(line_1-1,line_2-1,this_line-1)))
             {
-                flag=1;
+           
                 return -1;
             }
 		}

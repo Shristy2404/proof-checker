@@ -1,3 +1,4 @@
+// all required header files
 #include <bits/stdc++.h>
 #include <iostream> 
 #include <string.h> 
@@ -38,32 +39,38 @@ int precedence(char c)
 */
 void infixToPostfix(string input)
 {
-	std::stack<char> expression_stack;
+	std::stack<char> expression_stack; //!< Creating a character stack
 	expression_stack.push('\0');
 	
 	int len = input.length(); //!< Length of input string
 	int j=0;
 	for(int i=0;i<len;i++) 
 	{
-		if((input[i]>='a' && input[i]<='z'))  { 
-			output += input[i];}
+		if((input[i]>='a' && input[i]<='z'))
+		{ 
+			output += input[i];
+		}
 		else if(input[i]=='(')
 			expression_stack.push('(');
 		else if(input[i]==')')
 		{
-			while(expression_stack.top()!='(' && expression_stack.top()!='\0') {
+			while(expression_stack.top()!='(' && expression_stack.top()!='\0')
+			{
 			char c = expression_stack.top();
 			expression_stack.pop();
-			output+=c; }
+			output+=c; 
+			}
 			if(expression_stack.top()=='(') 
 			expression_stack.pop();
 		}
-		else {
+		else 
+		{
 			if(precedence(input[i])>precedence(expression_stack.top())|expression_stack.top()=='\0')
 				expression_stack.push(input[i]);
 			else 
 			{
-				while(precedence(input[i])<=precedence(expression_stack.top())&expression_stack.top()!='\0'){
+				while(precedence(input[i])<=precedence(expression_stack.top())&expression_stack.top()!='\0')
+				{
 					char c = expression_stack.top();
 					expression_stack.pop();
 					
@@ -74,21 +81,28 @@ void infixToPostfix(string input)
 		}
 	} 
 	
-	while(expression_stack.top()!='\0') { 
+	while(expression_stack.top()!='\0')
+	{ 
 	    output+=expression_stack.top();
 	    
 	    expression_stack.pop();
-	    }
+	}
 	cout << output <<endl;
 }
 
-
+/*!
+* \brief Create node with value and 2 pointers left and right
+*/
 struct node
 {
 	char val;
 	node *left, *right;
 };
 
+/*!
+* \brief A function to return a node pointer
+* \param char ch : It is the value of the pointer taken from output string
+*/
 node* create_node(char ch)
 {
 	node *temp = new node;
@@ -98,6 +112,10 @@ node* create_node(char ch)
 	return temp;
 }
 
+/*!
+* \brief A function to check if the scanned character is an operator or not
+* \param char ch: Takes a character from string output
+*/
 bool is_operator(char ch)
 {
 	if(ch == '^' || ch == 'V' || ch == '>' || ch == '~')
@@ -106,22 +124,25 @@ bool is_operator(char ch)
 }
 
 /*!
- * \brief Function generates the tree from a given postfix expression
- * \param string s takes the input postfix expression
- * \details
- * 1. Scan the postfix expression from left to right.
- * 2. If the character found is not an operator, we push it in the stack. 
- * 3. If the character found is an operator, we create a new node instance and pop top two elements from stack and make them 
- * as children of the new node. 
- * 4. Then we push this new node in the stack so that the whole instance can be popped the next time a node is encountered.
- * 5. Thus the tree is constructed in the stack. 
- * 6. We return the pointer to the root node, which will be used for further traversal of the tree. 
+* \brief A function to construct the expression tree from given postfix expression 
+* \param string str the given postfix expression 
+* \details 
+* 1. It traverses through the string and extracts each character.
+* 2. If that character is not an operator, it pushes it to the stack. 
+* 3. If it is an operator, then we pop two elements from the stack, assign them as child nodes of the operator obtained, and 
+* pushes this entire structure instance as a new node into the stack so that it can be popped as a child of some operator later.
+* 4. It returns a pointer to the root node of the constructed tree after the iterations are done.
 */
 node* construct_tree(string str)
 {
+
+	stack<node *> tree_stack; //!< Creating a pointer stack
+	node *t;//!< Creating a node pointer
+	node *temp_right;//!< Creating a pointer that points to the right of the node
+	node *temp_left;//!< Creating a pointer that points to the left of the node
+
 	stack<node *> tree_stack; 
 	node *t, *temp_right, *temp_left;
-
 	for(int i=0; i<str.length(); i++)
 	{
 		if(!(is_operator(str[i])))
@@ -147,7 +168,17 @@ node* construct_tree(string str)
 	return t;
 }
 
+ 
 
+/*! 
+* \brief Functon to print infix expression
+* \param node *t : Node of the tree
+* \details
+* 1. We traverse from the root.
+* 2. Go to the left subtree and go to it's left subtree again if it's exist.
+* 3. Finally reach the left most leaf print it and go to it's root.
+* 4. Print the root and repeat 2 and 3.
+*/
 void inorder(node *t)
 { 
     if(t)
@@ -167,7 +198,7 @@ void inorder(node *t)
 int main() 
 {	
 	cin.ignore();
-	string expression;
+	string expression;//!< The input expression (infix)
 	getline(cin,expression);
 	infixToPostfix(expression);
 	node *temp;
