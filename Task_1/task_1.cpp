@@ -1,3 +1,4 @@
+// all required header files
 #include <bits/stdc++.h>
 #include <iostream> 
 #include <string.h> 
@@ -45,25 +46,31 @@ void infixToPostfix(string input)
 	int j=0;
 	for(int i=0;i<len;i++) 
 	{
-		if((input[i]>='a' && input[i]<='z'))  { 
-			output += input[i];}
+		if((input[i]>='a' && input[i]<='z'))
+		{ 
+			output += input[i];
+		}
 		else if(input[i]=='(')
 			expression_stack.push('(');
 		else if(input[i]==')')
 		{
-			while(expression_stack.top()!='(' && expression_stack.top()!='\0') {
+			while(expression_stack.top()!='(' && expression_stack.top()!='\0')
+			{
 			char c = expression_stack.top();
 			expression_stack.pop();
-			output+=c; }
+			output+=c; 
+			}
 			if(expression_stack.top()=='(') 
 			expression_stack.pop();
 		}
-		else {
+		else 
+		{
 			if(precedence(input[i])>precedence(expression_stack.top())|expression_stack.top()=='\0')
 				expression_stack.push(input[i]);
 			else 
 			{
-				while(precedence(input[i])<=precedence(expression_stack.top())&expression_stack.top()!='\0'){
+				while(precedence(input[i])<=precedence(expression_stack.top())&expression_stack.top()!='\0')
+				{
 					char c = expression_stack.top();
 					expression_stack.pop();
 					
@@ -74,19 +81,18 @@ void infixToPostfix(string input)
 		}
 	} 
 	
-	while(expression_stack.top()!='\0') { 
+	while(expression_stack.top()!='\0')
+	{ 
 	    output+=expression_stack.top();
 	    
 	    expression_stack.pop();
-	    }
+	}
 	cout << output <<endl;
 }
 
 /*!
 * \brief Create node with value and 2 pointers left and right
 */
-
-
 struct node
 {
 	char val;
@@ -117,14 +123,23 @@ bool is_operator(char ch)
 	return false;
 }
 
-
+/*!
+* \brief A function to construct the expression tree from given postfix expression 
+* \param string str the given postfix expression 
+* \details 
+* 1. It traverses through the string and extracts each character.
+* 2. If that character is not an operator, it pushes it to the stack. 
+* 3. If it is an operator, then we pop two elements from the stack, assign them as child nodes of the operator obtained, and 
+* pushes this entire structure instance as a new node into the stack so that it can be popped as a child of some operator later.
+* 4. It returns a pointer to the root node of the constructed tree after the iterations are done.
+*/
 node* construct_tree(string str)
 {
 
 	stack<node *> tree_stack; //!< Creating a pointer stack
 	node *t;//!< Creating a node pointer
-	*temp_right;//!< Creating a pointer that points to the right of the node
-	temp_left;//!< Creating a pointer that points to the left of the node
+	node *temp_right;//!< Creating a pointer that points to the right of the node
+	node *temp_left;//!< Creating a pointer that points to the left of the node
 
 	stack<node *> tree_stack; 
 	node *t, *temp_right, *temp_left;
@@ -164,10 +179,6 @@ node* construct_tree(string str)
 * 3. Finally reach the left most leaf print it and go to it's root.
 * 4. Print the root and repeat 2 and 3.
 */
-
-
-
-
 void inorder(node *t)
 { 
     if(t)
