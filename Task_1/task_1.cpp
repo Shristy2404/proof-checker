@@ -1,10 +1,10 @@
 #include <bits/stdc++.h>
 #include <iostream> 
 #include <string.h> 
+
 using namespace std;
 
-// sravanthi's part
-string s; //!< The string containing the infix expression(given)
+string input; //!< The string containing the infix expression(given)
 string output; //!< The string containing the final postfix expression
 int precedence(char c)
 {
@@ -36,52 +36,48 @@ int precedence(char c)
  * 7. Pop and store in the output string from the stack until it is not empty.
  * 8. Print the output string.
 */
-void infixToPostfix(string s)
+void infixToPostfix(string input)
 {
-	std::stack<char> myStack;
-	myStack.push('\0');
+	std::stack<char> expression_stack;
+	expression_stack.push('\0');
 	
-	
-	int l; //!< Length of input string
-	l=s.length();
+	int len = input.length(); //!< Length of input string
 	int j=0;
-	for(int i=0;i<l;i++) 
+	for(int i=0;i<len;i++) 
 	{
-	    //cout<<prec(s[i]);
-		if((s[i]>='a' && s[i]<='z')/*||(s[i]>='A' && s[i]<='Z')*/)  { //cout<<s[i];
-			output+=s[i];}
-		else if(s[i]=='(')
-			myStack.push('(');
-		else if(s[i]==')')
+		if((input[i]>='a' && input[i]<='z')/*||(input[i]>='A' && input[i]<='Z')*/)  { //cout<<input[i];
+			output += input[i];}
+		else if(input[i]=='(')
+			expression_stack.push('(');
+		else if(input[i]==')')
 		{
-			while(myStack.top()!='(' && myStack.top()!='\0') {
-			char c = myStack.top();
-			myStack.pop();
-			//cout<<c;
+			while(expression_stack.top()!='(' && expression_stack.top()!='\0') {
+			char c = expression_stack.top();
+			expression_stack.pop();
 			output+=c; }
-			if(myStack.top()=='(') 
-			myStack.pop();
+			if(expression_stack.top()=='(') 
+			expression_stack.pop();
 		}
 		else {
-			if(precedence(s[i])>precedence(myStack.top())|myStack.top()=='\0')
-				myStack.push(s[i]);
-			else //if(precendenceOrder(s[i])<=precendenceOrder(myStack.top())
+			if(precedence(input[i])>precedence(expression_stack.top())|expression_stack.top()=='\0')
+				expression_stack.push(input[i]);
+			else //if(precendenceOrder(input[i])<=precendenceOrder(expression_stack.top())
 			{
-				while(precedence(s[i])<=precedence(myStack.top())&myStack.top()!='\0'){
-					char c = myStack.top();
-					myStack.pop();
+				while(precedence(input[i])<=precedence(expression_stack.top())&expression_stack.top()!='\0'){
+					char c = expression_stack.top();
+					expression_stack.pop();
 					//cout<<c;
 					output+=c;
 				}
-				myStack.push(s[i]);
+				expression_stack.push(input[i]);
 			}
 		}
 	} 
 	
-	while(myStack.top()!='\0') { 
-	    output+=myStack.top();
-	    //cout<< myStack.top();
-	    myStack.pop();
+	while(expression_stack.top()!='\0') { 
+	    output+=expression_stack.top();
+	    //cout<< expression_stack.top();
+	    expression_stack.pop();
 	    }
 	cout << output <<endl;
 }
