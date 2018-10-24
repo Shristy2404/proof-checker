@@ -45,7 +45,7 @@ void infixToPostfix(string input)
 	int j=0;
 	for(int i=0;i<len;i++) 
 	{
-		if((input[i]>='a' && input[i]<='z')/*||(input[i]>='A' && input[i]<='Z')*/)  { //cout<<input[i];
+		if((input[i]>='a' && input[i]<='z'))  { 
 			output += input[i];}
 		else if(input[i]=='(')
 			expression_stack.push('(');
@@ -61,12 +61,12 @@ void infixToPostfix(string input)
 		else {
 			if(precedence(input[i])>precedence(expression_stack.top())|expression_stack.top()=='\0')
 				expression_stack.push(input[i]);
-			else //if(precendenceOrder(input[i])<=precendenceOrder(expression_stack.top())
+			else 
 			{
 				while(precedence(input[i])<=precedence(expression_stack.top())&expression_stack.top()!='\0'){
 					char c = expression_stack.top();
 					expression_stack.pop();
-					//cout<<c;
+					
 					output+=c;
 				}
 				expression_stack.push(input[i]);
@@ -76,7 +76,7 @@ void infixToPostfix(string input)
 	
 	while(expression_stack.top()!='\0') { 
 	    output+=expression_stack.top();
-	    //cout<< expression_stack.top();
+	    
 	    expression_stack.pop();
 	    }
 	cout << output <<endl;
