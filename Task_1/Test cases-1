@@ -1,0 +1,24 @@
+Note: The function works for spaces in the infix expression too. So all these cases with spaces in between will also give the 
+correct output. 
+
+1. (p>(q>r))
+2. (bV(~(e>~f)))
+3. ((a^b)^(e>f))
+4. ((((a^b)^(e>f))^(aV~e))^(bV(~(e>~f))))
+5. (((a^b)^(e>f))^(aV~e))
+6. ((r>~s)V(p^q))
+7. (r^~s)
+8. (r>~s)
+9. ((p^q)^r)
+10. a
+11. (~q>~p)
+12. (p>p)
+13. ((q>r)>((~q>~p)>(p>r)))
+14. ((p^q)>r)
+15. ((p^q)>(p^r))
+16. ((aV(b>~c))>(c^d))
+17. ((((p^q)V(p^r))Vb)Vc)
+18. (~pV((~q>r)^s))
+19. (~(rVs>q)^(rVs>q))
+20. ((p>q)^~(p>q))
+21. (p^~p)

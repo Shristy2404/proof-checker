@@ -1,5 +1,5 @@
 /*!
- * \author Vishwangi Shah, Shravanti, Shristy Kapoor
+ * \author Vishwangi Shah, Sravanthi, Shristy Kapoor
  * \version 1.0
  * \date 24-10-2018
  * \copyright GNU Public License
@@ -57,7 +57,7 @@ public:
 	//utility functions
 	string remove_brackets(string rb);
 	int return_rule_index(string rule);
-	int removeSpaces();
+	int remove_spaces();
 	string only_statement(string line);
 	int return_rule_operator_index(string line);
 
@@ -80,15 +80,12 @@ proof_validator:: proof_validator(int l)
 	k = l;
 }
 
-
 /*!
  * \brief Function to remove first and last bracket from the string passed
  * \param string rb string from which you need to remove the first and last bracket
  * \details It checks if the first and last characters of the string are '(' and ')' respectively. If yes, it returns
  * the substring between these two positions after resizing, else, returns the same string which was received as input.
  */
-
-//function to remove first and last bracket from the string passed
 string proof_validator::remove_brackets(string rb)
 {
 	int len = rb.length(); /*!< Length of string */
@@ -131,7 +128,7 @@ int proof_validator::return_rule_index(string rule)
  * \param String in which spaces are to be removed
  * \details The function takes in the string, stores the characters except ' ' in an array and returns the number of non-space characters in the string.
  */
-int removeSpaces(string &a)
+int remove_spaces(string &a)
 {
     int count=0; /*!< Number of non-space characters */
 	for(int i=0;i<a.length();i++)
@@ -263,7 +260,6 @@ int proof_validator::check_rules()
 			int line_1 = 0; //!< The index of the line on which and-elimination is performed.
 			stringstream var1(temp.substr(index_2+1));
 			var1 >> line_1;
-			cout << line_1 << endl;
 			if(!(and_elimination(line_1-1, temp, rule_index)))
 			{1;
 				return -1;
@@ -275,7 +271,6 @@ int proof_validator::check_rules()
 			int line_1=0; //!< The index of the line on which or-introduction is performed.
 			stringstream var1(temp.substr(index_2+1));
 			var1 >> line_1;
-			cout << line_1 << endl;
 			if(!(or_introduction(line_1-1, temp, rule_index)))
 			{
 				return -1;
@@ -312,7 +307,6 @@ int proof_validator::check_rules()
             }
 		}
     }
-    cout << "line" << this_line << "correct" << endl;
 	return 0;
 }
 
@@ -407,8 +401,6 @@ bool proof_validator::or_introduction(int line_1, string line, int rule_index)
 {
 	string or_beginner = only_statement(str[line_1]); /*!< The initial expression(line) on which we use or introduction rules */
 	string or_statement = remove_brackets(only_statement(line)); /*!< Or introduction statement line */
-    //cout << or_beginner << endl;
-	//cout << or_statement << endl;
 	int rule_operator_pos = return_rule_operator_index(line);
 	if(rule_index == 4)
 	{
@@ -437,15 +429,10 @@ bool proof_validator::or_introduction(int line_1, string line, int rule_index)
 bool proof_validator::implies_elimination(int a,int b,int current)
 {
     string implies_statement = remove_brackets(only_statement(str[a])); /*!< Implies statement */
-    //cout<<x<<endl;
     int rule_operator_pos=return_rule_operator_index(str[a]); /*!< Index of '>' in the implies statement. */
-    //cout<<rule_operator_pos<<endl;
 	string statement_1 = only_statement(str[b]); /*!< Propositional formula in the line at parameter 2 */
-	//cout<<y<<endl;
 	string before_implies = implies_statement.substr(0,rule_operator_pos); /*!< String before '>' in the implies statement */
-	//cout<<x1<<endl;
 	string after_implies = implies_statement.substr(rule_operator_pos+1);  /*!< String after '>' in the implies statement */
-	//cout<<x2<<endl;
 	string currentline = str[current]; /*!< Current line */
 	currentline=only_statement(currentline);
 	if(before_implies.compare(statement_1)!=0||after_implies.compare(currentline)!=0)
@@ -465,25 +452,15 @@ bool proof_validator::implies_elimination(int a,int b,int current)
 bool proof_validator::modus_tollens(int a,int b,int current)
 {
 	int rule_operator_pos=return_rule_operator_index(str[a]); /*!< Index of '>' in the implies statement */
-	//cout<<rule_operator_pos<<endl;
-	//cout << str[b] << endl;
 	string statement_1 = only_statement(str[b]); /*!< Propositional formula in the line at parameter 2 */
-	//cout<<y<<endl;
     string implies_statement = remove_brackets(only_statement(str[a])); /*!< Implies statement */
 	string before_implies=implies_statement.substr(0,rule_operator_pos); /*!< String before '>' in implies statement */
 	string after_implies=implies_statement.substr(rule_operator_pos+1); /*!< String after '>' in implies statement */
 	string currentline=str[current]; /*!< Current line */
 	currentline=only_statement(currentline);
-	//cout<<currentline<<endl;
 	string negation("~"); /*!< character ~ */
 	before_implies.insert(0,negation);
 	after_implies.insert(0,negation);
-	//cout<<x1<<endl;
-	//cout<<x2<<endl;
-	//cout<<x1<<endl;
-	//cout<<x2<<endl;
-	//string p="~"+x1;
-	//string q="~"+x2;
 	if((after_implies.compare(statement_1)!=0)||(before_implies.compare(currentline)!=0))
         return false;
     else
@@ -515,7 +492,7 @@ int main()
 	for(ptr=obj.str.begin();ptr!=obj.str.end();ptr++)
     {
         string temp=*ptr; /*!< String pointed at by the iterator object */
-        int x=removeSpaces(temp); /*!< Number of elements in line with no space */
+        int x=remove_spaces(temp); /*!< Number of elements in line with no space */
         temp.resize(x);
         obj.str.at(v++)=temp;
     }

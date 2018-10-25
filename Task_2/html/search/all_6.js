@@ -1,7 +1,5 @@
 var searchData=
 [
-  ['only_5fstatement',['only_statement',['../classproof__validator.html#a818ccb5ef04dfea8fd02de4887227ff7',1,'proof_validator']]],
-  ['or_5fintroduction',['or_introduction',['../classproof__validator.html#ac826ac2aa5c8e0a2c16dac7790d4c681',1,'proof_validator']]],
-  ['or_5fintroduction_5f1',['OR_INTRODUCTION_1',['../task__2_8cpp.html#a123671730df4950b893a9a2f6bbb567f',1,'task_2.cpp']]],
-  ['or_5fintroduction_5f2',['OR_INTRODUCTION_2',['../task__2_8cpp.html#a8303127fab76ea223e18556bddeb595a',1,'task_2.cpp']]]
+  ['main',['main',['../task__2_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4',1,'task_2.cpp']]],
+  ['modus_5ftollens',['modus_tollens',['../classproof__validator.html#ab859c9072e7c2370a6a31298ea14424d',1,'proof_validator::modus_tollens()'],['../task__2_8cpp.html#ae327ac5c30065d3f1049eaebad42ff71',1,'MODUS_TOLLENS():&#160;task_2.cpp']]]
 ];

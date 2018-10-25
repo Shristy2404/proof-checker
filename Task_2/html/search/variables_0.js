@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['k',['k',['../classproof__validator.html#aef6ecfb9cb68681d7dd4e86f2bc07f48',1,'proof_validator']]]
+  ['flag',['flag',['../classproof__validator.html#a96531ce22c4bed1eff761661bbc72b21',1,'proof_validator']]]
 ];

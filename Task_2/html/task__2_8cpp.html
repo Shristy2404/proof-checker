@@ -126,9 +126,9 @@ Macros</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a8ba5f13c9160e52027f42da22f3cedec"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="task__2_8cpp.html#a8ba5f13c9160e52027f42da22f3cedec">removeSpaces</a> (string &amp;a)</td></tr>
-<tr class="memdesc:a8ba5f13c9160e52027f42da22f3cedec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to remove all spaces from a given passed string.  <a href="#a8ba5f13c9160e52027f42da22f3cedec">More...</a><br /></td></tr>
-<tr class="separator:a8ba5f13c9160e52027f42da22f3cedec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6f7731440e0ae1f100971a3160494a93"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="task__2_8cpp.html#a6f7731440e0ae1f100971a3160494a93">remove_spaces</a> (string &amp;a)</td></tr>
+<tr class="memdesc:a6f7731440e0ae1f100971a3160494a93"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to remove spaces from a string.  <a href="#a6f7731440e0ae1f100971a3160494a93">More...</a><br /></td></tr>
+<tr class="separator:a6f7731440e0ae1f100971a3160494a93"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae66f6b31b5ad750f1fe042a706a4e3d4"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="task__2_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4">main</a> ()</td></tr>
 <tr class="memdesc:ae66f6b31b5ad750f1fe042a706a4e3d4"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="task__2_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="main() function where execution begins ">main()</a> function where execution begins  <a href="#ae66f6b31b5ad750f1fe042a706a4e3d4">More...</a><br /></td></tr>
 <tr class="separator:ae66f6b31b5ad750f1fe042a706a4e3d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -234,15 +234,23 @@ Functions</h2></td></tr>
 
 <p><a class="el" href="task__2_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="main() function where execution begins ">main()</a> function where execution begins </p>
 <p>The function accepts the number of lines first and adds them to the vector defined as class variable. Then a iterator object iterates over the vector and removes spaces from all the lines. Then the function just calls check_rules() function. If '-1' is received, it is an invalid proof, else a valid proof. </p>
+<p>&lt; Number of lines in the proof</p>
+<p>&lt; Current index</p>
+<p>&lt; Object of class <a class="el" href="classproof__validator.html">proof_validator</a></p>
+<p>&lt; Storing the inputted string</p>
+<p>&lt; Iterator object for the vector</p>
+<p>&lt; String pointed at by the iterator object</p>
+<p>&lt; Number of elements in line with no space</p>
+<p>&lt; Result after checking rules </p>
 
 </div>
 </div>
-<a class="anchor" id="a8ba5f13c9160e52027f42da22f3cedec"></a>
+<a class="anchor" id="a6f7731440e0ae1f100971a3160494a93"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">int removeSpaces </td>
+          <td class="memname">int remove_spaces </td>
           <td>(</td>
           <td class="paramtype">string &amp;&#160;</td>
           <td class="paramname"><em>a</em></td><td>)</td>
@@ -251,14 +259,15 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Function to remove all spaces from a given passed string. </p>
+<p>Function to remove spaces from a string. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">string</td><td>rule string which is the rule that has been implemented in that particular line</td></tr>
+    <tr><td class="paramname">String</td><td>in which spaces are to be removed</td></tr>
   </table>
   </dd>
 </dl>
-<p>It compares the received string with the permitted rules and returns the matching macro value for the obtained rule, if no option matches, it returns -1. </p>
+<p>The function takes in the string, stores the characters except ' ' in an array and returns the number of non-space characters in the string. </p>
+<p>&lt; Number of non-space characters </p>
 
 </div>
 </div>

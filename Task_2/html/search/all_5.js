@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['main',['main',['../task__2_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4',1,'task_2.cpp']]],
-  ['modus_5ftollens',['modus_tollens',['../classproof__validator.html#ab859c9072e7c2370a6a31298ea14424d',1,'proof_validator::modus_tollens()'],['../task__2_8cpp.html#ae327ac5c30065d3f1049eaebad42ff71',1,'MODUS_TOLLENS():&#160;task_2.cpp']]]
+  ['logic_20in_20computer_20science_20project_3a_20a_20simple_20proof_2dchecker',['Logic in Computer Science Project: A simple proof-checker',['../index.html',1,'']]]
 ];

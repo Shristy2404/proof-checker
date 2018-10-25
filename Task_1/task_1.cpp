@@ -1,3 +1,18 @@
+/*!
+ * \author Vishwangi Shah, Sravanthi, Shristy Kapoor
+ * \version 1.0
+ * \date 24-10-2018
+ * \copyright GNU Public License
+ * \mainpage Logic in Computer Science Project: Parse Tree Generator
+ * \section intro_sec Introduction
+ * This code was developed as a part of as assignment for Logic in Computer Science. It is a simple program which takes in an 
+ * an infix expression and generates the parse tree and then prints it's inorder traversal back.
+ * \section detail_sec Details
+ * This code takes in the infix expression. 
+ * \section comp_sec Compilation
+ * You can compile this code by `g++ task_1.cpp` and execute it by `./a.out`
+ */
+
 // all required header files
 #include <bits/stdc++.h>
 #include <iostream> 
@@ -7,6 +22,43 @@ using namespace std;
 
 string input; //!< The string containing the infix expression(given)
 string output; //!< The string containing the final postfix expression
+
+/*!
+* \brief Create node with value and two pointers, left and right
+*/
+struct node
+{
+	char val;
+	node *left, *right;
+};
+
+/*!
+* \brief A function to return a node pointer
+* \param char ch : It is the value of the pointer taken from output string
+*/
+node* create_node(char ch)
+{
+	node *temp = new node;
+	temp->left = NULL;
+	temp->right = NULL;
+	temp->val = ch;
+	return temp;
+}
+
+/*!
+* \brief A function to check if the scanned character is an operator or not
+* \param char ch: Takes a character from string output
+*/
+bool is_operator(char ch)
+{
+	if(ch == '^' || ch == 'V' || ch == '>' || ch == '~')
+		return true;
+	return false;
+}
+
+/*!
+* \brief Return the precedence of operators
+*/
 int precedence(char c)
 {
 	char ch=c;
@@ -23,21 +75,40 @@ int precedence(char c)
 }
 
 /*!
+ * \brief Function to remove spaces from a string
+ * \param String in which spaces are to be removed
+ * \details The function takes in the string, stores the characters except ' ' in an array and returns the number of 
+ * non-space characters in the string.
+ */
+int remove_spaces(string &a)
+{
+    int count=0; /*!< Number of non-space characters */
+	for(int i=0;i<a.length();i++)
+	{
+		if(a[i]!=' ')
+        	a[count++]=a[i];
+	}
+	return count;
+}
+
+/*!
  * \brief Function gives the postfix expression when given an infix expression
  * \param string s takes the input infix expression
  * \details
  * 1. Scan the infix expression from left to right.
  * 2. If the scanned character is an operand, stire in output string.
  * 3. Else,
- * …..3.1 If the precedence of the scanned operator is greater than the precedence of the operator in the stack(or the stack is empty), push it.
- * …..3.2 Else, Pop the operator from the stack until the precedence of the scanned operator is less-equal to the precedence of the operator  *  residing on the top of the stack. Push the scanned operator to the stack.
+ * …..3.1 If the precedence of the scanned operator is greater than the precedence of the operator in the stack(or the stack
+ *  is empty), push it.
+ * …..3.2 Else, Pop the operator from the stack until the precedence of the scanned operator is less-equal to the precedence 
+ * of the operator  *  residing on the top of the stack. Push the scanned operator to the stack.
  * 4. If the scanned character is an ‘(‘, push it to the stack.
  * 5. If the scanned character is an ‘)’, pop and store in output string from the stack until an ‘(‘ is encountered.
  * 6. Repeat steps 2-6 until infix expression is scanned.
  * 7. Pop and store in the output string from the stack until it is not empty.
  * 8. Print the output string.
 */
-void infixToPostfix(string input)
+void infix_to_postfix(string input)
 {
 	std::stack<char> expression_stack; //!< Creating a character stack
 	expression_stack.push('\0');
@@ -87,40 +158,7 @@ void infixToPostfix(string input)
 	    
 	    expression_stack.pop();
 	}
-	cout << output <<endl;
-}
-
-/*!
-* \brief Create node with value and 2 pointers left and right
-*/
-struct node
-{
-	char val;
-	node *left, *right;
-};
-
-/*!
-* \brief A function to return a node pointer
-* \param char ch : It is the value of the pointer taken from output string
-*/
-node* create_node(char ch)
-{
-	node *temp = new node;
-	temp->left = NULL;
-	temp->right = NULL;
-	temp->val = ch;
-	return temp;
-}
-
-/*!
-* \brief A function to check if the scanned character is an operator or not
-* \param char ch: Takes a character from string output
-*/
-bool is_operator(char ch)
-{
-	if(ch == '^' || ch == 'V' || ch == '>' || ch == '~')
-		return true;
-	return false;
+	cout << "The postfix expression is: " << output <<endl;
 }
 
 /*!
@@ -200,14 +238,14 @@ void inorder(node *t)
 
 int main() 
 {	
-	cin.ignore();
 	string expression;//!< The input expression (infix)
 	getline(cin,expression);
-	infixToPostfix(expression);
+	int x= remove_spaces(expression);
+	expression.resize(x);
+	infix_to_postfix(expression);
 	node *temp;
 	temp=construct_tree(output);
 	inorder(temp);
+	cout << endl;
 	return 0;
 }
-
-

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['task_5f1_2ecpp',['task_1.cpp',['../task__1_8cpp.html',1,'']]]
+  ['val',['val',['../structnode.html#a93d785619c1b035df155cf51b59139a1',1,'node']]]
 ];
