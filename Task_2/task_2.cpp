@@ -22,6 +22,7 @@
  */
 
 //all header files
+#include <time.h>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -50,7 +51,6 @@ public:
 	int k;         //! Number of lines in proof
     //number of lines in proof
 	//variable to signify is proof is valid or not
-	int flag;
     //constructor
 	proof_validator(int l);
 
@@ -338,8 +338,7 @@ bool proof_validator::and_introduction(int line_1, int line_2, string line)
 {
     string statement_1 = remove_brackets(only_statement(line)); /*!< Line in which and is introduced */
 	string comp_1 = only_statement(str[line_1]) + "^" + only_statement(str[line_2]); /*!< Introducing and on line 1 and line 2 */
-	string comp_2 = only_statement(str[line_2]) + "^" + only_statement(str[line_1]); /*!< Introducing and on line 2 and line 1 */
-	if( (!(statement_1.compare(comp_1))) || (!(statement_1.compare(comp_2))))
+	if((!(statement_1.compare(comp_1))))
 		return true;
 	return false;
 }
@@ -475,6 +474,7 @@ bool proof_validator::modus_tollens(int a,int b,int current)
 */
 int main()
 {
+	clock_t start,end;
 	int lines; /*!< Number of lines in the proof */
 	int v=0; /*!< Current index */
 	cin >> lines;
@@ -486,6 +486,7 @@ int main()
 		getline(cin, temp);
 		obj.str.push_back(temp);
 	}
+	start = clock();
 
 	vector<string>::iterator ptr; /*!< Iterator object for the vector */
 
@@ -497,9 +498,15 @@ int main()
         obj.str.at(v++)=temp;
     }
     int result = obj.check_rules(); /*!< Result after checking rules */
+    end = clock();
     if(result == -1)
     	cout << "Invalid proof" << endl;
     else if(result == 0)
     	cout << "Valid proof" << endl;
+
+    cout << "Time required for execution: "
+	<< (double)(end-start)/CLOCKS_PER_SEC
+	<< " seconds." << "\n\n";
+
 	return 0;
 }

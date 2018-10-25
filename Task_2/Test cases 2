@@ -1,14 +1,27 @@
 TEST CASES
 
 NOTE: The test cases won't work if there is a tab space in between. They will work for spaces only. There may be 4 spaces.
+
 1)
+Input: 
 4 
 p/P
 q/P
 (p^q)/^i/1/2
 ((r>~s)V(p^q))/Vi2/3
 
+Output:
+Valid proof
+Time required for execution: 0.00014 seconds.
+
+
+real	0m4.433s
+user	0m0.000s
+sys	0m0.004s
+ 
+
 2)
+Input: 
 7
 p/P
 (r>~s)/P
@@ -18,7 +31,17 @@ r/P
 (r^~s)/^i/3/5
 ((pV~q)^(r^~s))/^i/4/6
 
+Output: 
+Valid proof
+Time required for execution: 0.000178 seconds.
+
+
+real	0m1.881s
+user	0m0.004s
+sys	0m0.000s 
+
 3)
+Input: 
 11
 (a^b)/P
 a/^e1/1
@@ -32,7 +55,17 @@ b/^e2/1
 (((a^b)^(e>f))^(aV~e))/^i/9/7
 ((((a^b)^(e>f))^(aV~e))^(bV(~(e>~f))))/^i/10/8
 
+Output:
+Valid proof
+Time required for execution: 0.000258 seconds.
+
+
+real	0m5.118s
+user	0m0.000s
+sys	0m0.004s
+
 4)
+Input: 
 11
 (a^b)/P
 a/^e1/1
@@ -46,14 +79,34 @@ b/^e2/1
 (((a^b)^(e>f))^(aV~e))/^i/9/7
 ((((a^b)^ (e>f))^(aV~e))^(bV(~(e>~f))))/^i/10/8
 
+Output:
+Valid proof
+Time required for execution: 0.000254 seconds.
+
+
+real	0m1.305s
+user	0m0.004s
+sys	0m0.000s
+
 5)
+Input:
 4
 (p^q)/P
 r/P
 q/^e2/1
 (q^r)/^i/3/2
 
+Output:
+Valid proof
+Time required for execution: 0.000104 seconds.
+
+
+real	0m1.205s
+user	0m0.000s
+sys	0m0.000s
+
 6)
+Input:
 6
 ((p^q)^r)/P
 (s^t)/P
@@ -62,8 +115,18 @@ q/^e2/3
 s/^e1/2
 (q^s)/^i/4/5
 
+Output:
+Valid proof
+Time required for execution: 0.000138 seconds.
+
+
+real	0m0.864s
+user	0m0.004s
+sys	0m0.000s
+
 7)
-6 
+Input:
+6
 (p>(q>r))/P
 (p>q)/P
 p/P
@@ -71,7 +134,17 @@ p/P
 q/>e/2/3
 r/>e/4/5
 
+Output:
+Valid proof
+Time required for execution: 0.000135 seconds.
+
+
+real	0m1.229s
+user	0m0.004s
+sys	0m0.000s
+
 8)
+Input:
 5
 (p>(q>r))/P
 p/P
@@ -79,7 +152,17 @@ p/P
 (q>r)/>e/1/2
 ~q/MT/4/3
 
+Output:
+Valid proof
+Time required for execution: 0.000144 seconds.
+
+
+real	0m1.205s
+user	0m0.004s
+sys	0m0.000s
+
 9)
+Input:
 1024
 a/P
 b/P
@@ -1106,3 +1189,48 @@ b/P
 (a^b)/^i/1/2
 (a^b)/^i/1/2
 
+Output: 
+Valid proof
+Time required for execution: 0.01201 seconds.
+
+
+real	0m1.831s
+user	0m0.020s
+sys	0m0.000s 
+
+10) 
+Input:
+4
+p/P
+q/P
+(p^q)/Vi1/1/2
+((r>~s)V(p^q))/Vi2/3
+
+Output:
+Invalid proof
+Time required for execution: 6.5e-05 seconds.
+
+
+real	0m2.409s
+user	0m0.004s
+sys	0m0.000s
+
+11)
+Input:
+7
+p/P
+(r>~s)/P
+r/P
+(pV~q)/Vi2/1
+~s/>e/2/3
+(r^~s)/^i/3/5
+((pV~q)^(r^~s))/^i/4/6
+
+Output:
+Invalid proof
+Time required for execution: 0.000112 seconds.
+
+
+real	0m1.680s
+user	0m0.004s
+sys	0m0.000s

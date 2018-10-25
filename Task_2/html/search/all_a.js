@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['str',['str',['../classproof__validator.html#a609da5066268d76ef1d693c9bab149b6',1,'proof_validator']]]
+  ['task_5f2_2ecpp',['task_2.cpp',['../task__2_8cpp.html',1,'']]]
 ];

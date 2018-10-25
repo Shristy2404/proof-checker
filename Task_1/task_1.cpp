@@ -16,7 +16,8 @@
 // all required header files
 #include <bits/stdc++.h>
 #include <iostream> 
-#include <string.h> 
+#include <string.h>
+#include <time.h> 
 
 using namespace std;
 
@@ -221,7 +222,7 @@ node* construct_tree(string str)
 * 4. Print the root and repeat 2 and 3.
 */
 void inorder(node *t)
-{ 
+{   
     if(t)
     {
         if(t->left)
@@ -231,21 +232,30 @@ void inorder(node *t)
         cout << t->val;
 
         inorder(t->right);
-        if(t->right)
+        if(t->right && (t->val!='~'))
             cout << ")";
     }
 }
 
 int main() 
 {	
+	clock_t start,end;
 	string expression;//!< The input expression (infix)
 	getline(cin,expression);
+	start = clock();
 	int x= remove_spaces(expression);
 	expression.resize(x);
 	infix_to_postfix(expression);
 	node *temp;
 	temp=construct_tree(output);
+	cout<<"Infix expression after inorder traversal is: ";
 	inorder(temp);
+	end = clock();
 	cout << endl;
+
+	cout << "Time required for execution: "
+	<< (double)(end-start)/CLOCKS_PER_SEC
+	<< " seconds." << "\n\n"; 
+
 	return 0;
 }

@@ -1,24 +1,297 @@
 Note: The function works for spaces in the infix expression too. So all these cases with spaces in between will also give the 
 correct output. 
 
-1. (p>(q>r))
-2. (bV(~(e>~f)))
-3. ((a^b)^(e>f))
-4. ((((a^b)^(e>f))^(aV~e))^(bV(~(e>~f))))
-5. (((a^b)^(e>f))^(aV~e))
-6. ((r>~s)V(p^q))
-7. (r^~s)
-8. (r>~s)
-9. ((p^q)^r)
-10. a
-11. (~q>~p)
-12. (p>p)
-13. ((q>r)>((~q>~p)>(p>r)))
-14. ((p^q)>r)
-15. ((p^q)>(p^r))
-16. ((aV(b>~c))>(c^d))
-17. ((((p^q)V(p^r))Vb)Vc)
-18. (~pV((~q>r)^s))
-19. (~(rVs>q)^(rVs>q))
-20. ((p>q)^~(p>q))
-21. (p^~p)
+1. 
+Input:
+(p>(q>r))
+   
+Output:
+The postfix expression is: pqr>>
+Infix expression after inorder traversal is: (p>(q>r))
+Time required for execution: 0.000166 seconds.
+
+
+real	0m50.363s
+user	0m0.004s
+sys	0m0.000s
+
+2. 
+Input:
+(bV~(e>~f))
+
+Output:
+The postfix expression is: bef~>~V
+Infix expression after inorder traversal is: (bV~(e>~f))
+Time required for execution: 0.000154 seconds.
+
+
+real	0m7.415s
+user	0m0.000s
+sys	0m0.004s
+
+3. 
+Input:
+((a^b)^(e>f))
+
+Output:
+The postfix expression is: ab^ef>^
+Infix expression after inorder traversal is: ((a^b)^(e>f))
+Time required for execution: 0.000156 seconds.
+
+
+real	0m3.213s
+user	0m0.000s
+sys	0m0.004s
+
+4. 
+Input:
+((((a^b)^(e>f))^(aV~e))^(bV~(e>~f)))
+
+Output:
+The postfix expression is: ab^ef>^ae~V^bef~>~V^
+Infix expression after inorder traversal is: ((((a^b)^(e>f))^(aV~e))^(bV~(e>~f)))
+Time required for execution: 0.000165 seconds.
+
+
+real	0m2.674s
+user	0m0.000s
+sys	0m0.004s
+
+5. 
+Input:
+(((a^b)^(e>f))^(aV~e))
+
+Output:
+The postfix expression is: ab^ef>^ae~V^
+Infix expression after inorder traversal is: (((a^b)^(e>f))^(aV~e))
+Time required for execution: 0.000154 seconds.
+
+
+real	0m3.908s
+user	0m0.004s
+sys	0m0.000s
+
+6. 
+Input:
+((r>~s)V(p^q))
+
+Output:
+The postfix expression is: rs~>pq^V
+Infix expression after inorder traversal is: ((r>~s)V(p^q))
+Time required for execution: 0.000173 seconds.
+
+
+real	0m1.466s
+user	0m0.000s
+sys	0m0.008s
+
+7. 
+Input:
+(r^~s)
+
+Output:
+The postfix expression is: rs~^
+Infix expression after inorder traversal is: (r^~s)
+Time required for execution: 0.000166 seconds.
+
+
+real	0m2.203s
+user	0m0.004s
+sys	0m0.000s
+
+8. 
+Input:
+(r>~s)
+
+Output:
+The postfix expression is: rs~>
+Infix expression after inorder traversal is: (r>~s)
+Time required for execution: 0.000128 seconds.
+
+
+real	0m3.762s
+user	0m0.004s
+sys	0m0.000s
+
+9. 
+Input:
+((p^q)^r)
+
+Output:
+The postfix expression is: pq^r^
+Infix expression after inorder traversal is: ((p^q)^r)
+Time required for execution: 0.000174 seconds.
+
+
+real	0m2.334s
+user	0m0.004s
+sys	0m0.000s
+
+10. 
+Input:
+a
+
+Output:
+The postfix expression is: a
+Infix expression after inorder traversal is: a
+Time required for execution: 0.000136 seconds.
+
+
+real	0m2.648s
+user	0m0.000s
+sys	0m0.004s
+
+11. 
+Input:
+(~q>~p)
+
+Output:
+The postfix expression is: q~p~>
+Infix expression after inorder traversal is: (~q>~p)
+Time required for execution: 0.000164 seconds.
+
+
+real	0m2.259s
+user	0m0.008s
+sys	0m0.000s
+
+12. 
+Input:
+(p>p)
+
+Output:
+The postfix expression is: pp>
+Infix expression after inorder traversal is: (p>p)
+Time required for execution: 0.000147 seconds.
+
+
+real	0m2.404s
+user	0m0.004s
+sys	0m0.000s
+
+13. 
+Input:
+((q>r)>((~q>~p)>(p>r)))
+
+Output:
+The postfix expression is: qr>q~p~>pr>>>
+Infix expression after inorder traversal is: ((q>r)>((~q>~p)>(p>r)))
+Time required for execution: 0.000157 seconds.
+
+
+real	0m2.194s
+user	0m0.004s
+sys	0m0.000s
+
+14. 
+Input:
+((p^q)>r)
+
+Output:
+The postfix expression is: pq^r>
+Infix expression after inorder traversal is: ((p^q)>r)
+Time required for execution: 0.000162 seconds.
+
+
+real	0m2.044s
+user	0m0.004s
+sys	0m0.000s
+
+15. 
+Input:
+((p^q)>(p^r))
+
+Output:
+The postfix expression is: pq^pr^>
+Infix expression after inorder traversal is: ((p^q)>(p^r))
+Time required for execution: 0.000171 seconds.
+
+
+real	0m3.049s
+user	0m0.004s
+sys	0m0.000s
+
+16. 
+Input:
+((aV(b>~c))>(c^d))
+
+Output:
+The postfix expression is: abc~>Vcd^>
+Infix expression after inorder traversal is: ((aV(b>~c))>(c^d))
+Time required for execution: 0.000133 seconds.
+
+
+real	0m2.614s
+user	0m0.004s
+sys	0m0.000s
+
+17. 
+Input:
+((((p^q)V(p^r))Vb)Vc)
+
+Output:
+The postfix expression is: pq^pr^VbVcV
+Infix expression after inorder traversal is: ((((p^q)V(p^r))Vb)Vc)
+Time required for execution: 0.000149 seconds.
+
+
+real	0m1.726s
+user	0m0.004s
+sys	0m0.000s
+
+18. 
+Input:
+(~pV((~q>r)^s))
+
+Output:
+The postfix expression is: p~q~r>s^V
+Infix expression after inorder traversal is: (~pV((~q>r)^s))
+Time required for execution: 0.000165 seconds.
+
+
+real	0m1.745s
+user	0m0.000s
+sys	0m0.008s
+
+19. 
+Input:
+(~(rVs>q)^(rVs>q))
+
+Output:
+The postfix expression is: rsVq>~rsVq>^
+Infix expression after inorder traversal is: (~((rVs)>q)^((rVs)>q))
+Time required for execution: 0.000212 seconds.
+
+
+real	0m6.597s
+user	0m0.004s
+sys	0m0.000s
+
+20. 
+Input:
+((p>q)^~(p>q))
+
+Output:
+The postfix expression is: pq>pq>~^
+Infix expression after inorder traversal is: ((p>q)^~(p>q))
+Time required for execution: 0.00017 seconds.
+
+
+real	0m2.823s
+user	0m0.000s
+sys	0m0.004s
+
+21. 
+Input:
+(p^~p)
+
+Output:
+The postfix expression is: pp~^
+Infix expression after inorder traversal is: (p^~p)
+Time required for execution: 0.000173 seconds.
+
+
+real	0m7.921s
+user	0m0.008s
+sys	0m0.000s
+
